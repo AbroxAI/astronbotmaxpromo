@@ -4,19 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AstronBot Max</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Locked custom styles -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
-  <!-- HERO SECTION placeholder -->
-  <section class="hero">
-    <!-- Hero content will go here later -->
+
+  <!-- HERO SECTION -->
+  <section class="hero relative z-10 flex items-center justify-center">
+    <div class="logo-shine-wrapper">
+      <img
+        src="assets/logo.png"
+        alt="AstronBot Max Logo"
+        class="
+          w-full
+          max-w-[220px]
+          sm:max-w-[260px]
+          md:max-w-[300px]
+          lg:max-w-[340px]
+          xl:max-w-[380px]
+          h-auto
+          animate-logoGlow
+          select-none
+          relative
+          z-10
+        "
+      />
+      <span class="logo-shine"></span>
+    </div>
   </section>
 
   <!-- FOOTER -->
   <footer class="site-footer">
     <p>© 2026 AstronBot Max. All rights reserved.</p>
   </footer>
+
+  <!-- Pause animations when tab is hidden -->
+  <script>
+    document.addEventListener("visibilitychange", () => {
+      const logo = document.querySelector(".animate-logoGlow");
+      const shine = document.querySelector(".logo-shine");
+
+      if (!logo) return;
+
+      if (document.hidden) {
+        logo.style.animationPlayState = "paused";
+        if (shine) shine.style.animationPlayState = "paused";
+      } else {
+        logo.style.animationPlayState = "running";
+        if (shine) shine.style.animationPlayState = "running";
+      }
+    });
+  </script>
 
 </body>
 </html>
