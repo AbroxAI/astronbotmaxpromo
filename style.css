@@ -1,0 +1,63 @@
+/* ===== GLOBAL BACKGROUND ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #05070a;
+  color: #e6e8eb;
+}
+
+/* Main page background: very dark blue-black gradient */
+body {
+  background-image:
+    linear-gradient(
+      to bottom,
+      #03060a 0%,
+      #050a12 50%,
+      #020407 100%
+    );
+  position: relative;
+}
+
+/* Ultra-subtle noise overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  padding: 24px 16px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(230, 232, 235, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* ===== HERO SECTION placeholder ===== */
+.hero {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
