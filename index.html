@@ -8,7 +8,7 @@
   <!-- main stylesheet -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Tailwind helpers (optional; you already used them) -->
+  <!-- Tailwind helpers (optional) -->
   <script src="https://cdn.tailwindcss.com" defer></script>
 
   <style>
@@ -26,7 +26,7 @@
   <!-- skip link for accessibility -->
   <a class="sr-only-focusable" href="#main">Skip to content</a>
 
-  <!-- HEADER (anchored, small) -->
+  <!-- HEADER (anchored, compact) -->
   <header class="site-header w-full flex justify-center items-center pt-5 pb-2 px-4" role="banner">
     <img
       src="assets/logo.png"
@@ -38,9 +38,8 @@
 
   <main id="main" role="main">
 
-    <!-- HERO -->
+    <!-- HERO (compact) -->
     <section class="hero px-4" aria-labelledby="hero-title">
-      <!-- If you want text above hero image later, add an H1 here and keep the image decorative -->
       <img
         src="assets/hero.png"
         alt="AstronBot Max — product hero"
@@ -49,7 +48,7 @@
       />
     </section>
 
-    <!-- VIDEO (grouped with hero; no negative margins) -->
+    <!-- VIDEO (compact, grouped with hero) -->
     <section class="video-section px-4 pb-14">
       <div class="video-shell">
 
@@ -67,7 +66,7 @@
 
         <!-- Player utilities -->
         <div class="video-utilities" role="toolbar" aria-label="Video playback controls">
-          <div class="speed-group" aria-hidden="false">
+          <div class="speed-group">
             <label for="speedSelect" class="sr-only">Playback speed</label>
             <select id="speedSelect" class="speed-select" aria-label="Playback speed">
               <option value="0.75">0.75×</option>
