@@ -1,63 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AstronBot Max</title>
 
-  <!-- Locked styles (UNCHANGED) -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Locked background + footer styles -->
+  <link rel="stylesheet" href="style.css">
 
-  <!-- Tailwind CDN — only used for layout & responsive utilities -->
+  <!-- Tailwind (layout utilities only) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tiny inline animation (non-invasive). Respects reduced-motion preference. -->
+  <!-- Subtle premium hero fade-in -->
   <style>
     @media (prefers-reduced-motion: no-preference) {
       .hero-fade {
         opacity: 0;
-        transform: translateY(6px);
-        animation: heroFadeIn 420ms cubic-bezier(.22,.9,.28,1) forwards;
+        transform: translateY(4px);
+        animation: heroFade 420ms cubic-bezier(.22,.9,.28,1) forwards;
         animation-delay: 120ms;
       }
-      @keyframes heroFadeIn {
-        to { opacity: 1; transform: translateY(0); }
+      @keyframes heroFade {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .hero-fade { opacity: 1; transform: none; animation: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- LOGO: sized by responsive max-widths so it reads clearly on phones and scales proportionally -->
-  <header class="w-full flex justify-center pt-8 pb-2 relative z-10 px-4">
+  <!-- LOGO -->
+  <header class="w-full flex justify-center pt-6 pb-1 px-4 relative z-10">
     <img
       src="assets/logo.png"
       alt="AstronBot Max Logo"
-      class="w-full max-w-[280px] sm:max-w-[380px] md:max-w-[520px] lg:max-w-[680px] xl:max-w-[840px] h-auto mx-auto select-none pointer-events-auto"
-      loading="eager"
+      class="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[380px] h-auto mx-auto select-none"
       decoding="async"
+      loading="eager"
     />
   </header>
 
-  <!-- HERO SECTION:
-       - Uses your .hero CSS (70vh stage) but aligns content to the top so the image sits under the logo.
-       - Responsive max-widths tuned for a wide, text-heavy hero to keep text readable.
-       - hero-fade gives a short premium fade-up (respects reduced-motion).
-  -->
-  <section class="hero items-start pt-4 sm:pt-6 md:pt-8 lg:pt-10 px-4">
+  <!-- HERO -->
+  <section class="hero items-start pt-1 sm:pt-2 md:pt-3 px-4">
     <img
       src="assets/hero.png"
-      alt="AstronBot Max Hero Headline"
-      class="hero-fade w-full max-w-[20rem] sm:max-w-[40rem] md:max-w-4xl lg:max-w-6xl xl:max-w-7xl h-auto mx-auto pointer-events-none select-none"
-      loading="lazy"
+      alt="AstronBot Max Hero"
+      class="hero-fade w-full max-w-[22rem] sm:max-w-[36rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto select-none pointer-events-none"
       decoding="async"
+      loading="lazy"
     />
   </section>
 
-  <!-- FOOTER (UNCHANGED) -->
+  <!-- FOOTER -->
   <footer class="site-footer">
     <p>© 2026 AstronBot Max. All rights reserved.</p>
   </footer>
