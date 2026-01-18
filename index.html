@@ -21,10 +21,7 @@
         animation-delay: 120ms;
       }
       @keyframes heroFade {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        to { opacity: 1; transform: translateY(0); }
       }
     }
   </style>
@@ -37,8 +34,8 @@
       src="assets/logo.png"
       alt="AstronBot Max Logo"
       class="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[380px] h-auto mx-auto select-none"
-      decoding="async"
       loading="eager"
+      decoding="async"
     />
   </header>
 
@@ -48,9 +45,54 @@
       src="assets/hero.png"
       alt="AstronBot Max Hero"
       class="hero-fade w-full max-w-[22rem] sm:max-w-[36rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto select-none pointer-events-none"
-      decoding="async"
       loading="lazy"
+      decoding="async"
     />
+  </section>
+
+  <!-- VIDEO SECTION -->
+  <section class="w-full flex justify-center px-4 mt-8 sm:mt-10 md:mt-12 lg:mt-14 relative z-10">
+    <div class="w-full max-w-[320px] sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
+
+      <!-- Video Frame -->
+      <div class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+        <video
+          id="demoVideo"
+          src="assets/demo.mp4"
+          controls
+          preload="metadata"
+          class="w-full h-full object-contain"
+        ></video>
+      </div>
+
+      <!-- Video Utility Bar -->
+      <div class="flex items-center justify-between mt-3 text-sm text-white/60">
+
+        <!-- Playback Speed -->
+        <div class="flex items-center gap-2">
+          <select
+            class="bg-transparent border border-white/10 rounded-md px-2 py-1 text-white/80 focus:outline-none focus:border-white/30"
+            onchange="document.getElementById('demoVideo').playbackRate = this.value"
+          >
+            <option value="0.75">0.75×</option>
+            <option value="1" selected>1×</option>
+            <option value="1.25">1.25×</option>
+            <option value="1.5">1.5×</option>
+            <option value="2">2×</option>
+          </select>
+          <span class="text-white/50">Speed</span>
+        </div>
+
+        <!-- Report Issue -->
+        <a
+          href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue"
+          class="hover:text-white transition"
+        >
+          Report playback issue
+        </a>
+
+      </div>
+    </div>
   </section>
 
   <!-- FOOTER -->
