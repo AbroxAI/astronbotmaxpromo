@@ -5,45 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AstronBot Max</title>
 
-  <!-- Locked styles (unchanged) -->
+  <!-- Locked styles (UNCHANGED) -->
   <link rel="stylesheet" href="style.css" />
 
   <!-- Tailwind CDN — layout & responsive utilities only -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Inline, tiny animation (respects reduced-motion). Keeps style.css untouched. -->
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-fade {
+        opacity: 0;
+        transform: translateY(6px);
+        animation: heroFadeIn 420ms cubic-bezier(.22,.9,.28,1) forwards;
+        animation-delay: 120ms;
+      }
+      @keyframes heroFadeIn {
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-fade { opacity: 1; transform: none; animation: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- HEADER / LOGO: scaled up for clear visibility on phones and larger screens -->
+  <!-- LOGO: scaled to be clearly visible on phones and proportional on larger screens -->
   <header class="w-full flex justify-center pt-8 pb-2 relative z-10 px-4">
     <img
       src="assets/logo.png"
       alt="AstronBot Max Logo"
-      class="w-auto h-20 sm:h-24 md:h-28 lg:h-32 xl:h-36 mx-auto select-none pointer-events-auto"
+      class="w-auto h-24 sm:h-28 md:h-32 lg:h-36 xl:h-40 mx-auto select-none pointer-events-auto"
       loading="eager"
       decoding="async"
     />
-    <!-- Optional retina: upload assets/logo@2x.png and uncomment example below
-    <img src="assets/logo.png" srcset="assets/logo@2x.png 2x" ... />
-    -->
   </header>
 
-  <!-- HERO SECTION: uses your .hero CSS but overrides vertical centering
-       and uses responsive max-widths tuned for a wide text-heavy image. -->
+  <!-- HERO SECTION:
+       - Uses your .hero CSS (70vh block) but aligns content to the top so the image sits under the logo.
+       - Responsive max-widths tuned for a wide/text-heavy hero.
+       - hero-fade provides a short, premium fade-up (respects reduced-motion).
+  -->
   <section class="hero items-start pt-4 sm:pt-6 md:pt-8 lg:pt-10 px-4">
     <img
       src="assets/hero.png"
       alt="AstronBot Max Hero Headline"
-      class="w-full max-w-[18rem] sm:max-w-[36rem] md:max-w-4xl lg:max-w-6xl xl:max-w-7xl h-auto mx-auto pointer-events-none select-none"
+      class="hero-fade w-full max-w-[20rem] sm:max-w-[40rem] md:max-w-4xl lg:max-w-6xl xl:max-w-7xl h-auto mx-auto pointer-events-none select-none"
       loading="lazy"
       decoding="async"
     />
-    <!-- Optional retina: upload assets/hero@2x.png and replace the src line above with:
-         src="assets/hero.png" srcset="assets/hero.png 1x, assets/hero@2x.png 2x"
-         This provides crisper pixels on high-DPI devices without layout changes.
-    -->
   </section>
 
-  <!-- FOOTER (unchanged) -->
+  <!-- FOOTER (UNCHANGED) -->
   <footer class="site-footer">
     <p>© 2026 AstronBot Max. All rights reserved.</p>
   </footer>
