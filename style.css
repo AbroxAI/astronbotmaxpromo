@@ -1,4 +1,4 @@
-/* ===== GLOBAL BACKGROUND ===== */
+/* ===== GLOBAL VARIABLES & BASICS ===== */
 :root{
   --bg-1:#03060a;
   --bg-2:#050a12;
@@ -88,7 +88,7 @@ body::before {
 /* Hero image sizing */
 .hero-image {
   width: 100%;
-  max-width: 36rem;    /* ~576px — feels balanced against video */
+  max-width: 36rem;    /* ~576px — balanced against video */
   height: auto;
   display: block;
 }
@@ -175,6 +175,63 @@ body::before {
   .site-logo { max-width: 300px; }
   .hero { padding-top: 2.5rem; padding-bottom: 3rem; }
   .video-shell { max-width: 1024px; }
+}
+
+/* ====== FORCE-COMPACT MODE — strong overrides (paste at end) ====== */
+/* Uses stronger specificity + !important to ensure it overrides existing rules. */
+
+.site-header { padding-top: 0.4rem !important; padding-bottom: 0.3rem !important; }
+.site-header .site-logo,
+.site-logo {
+  width: 100% !important;
+  max-width: 110px !important;   /* much smaller logo */
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* Tight hero — much smaller hero image */
+.hero { padding-top: 0.5rem !important; padding-bottom: 0.6rem !important; }
+.hero .hero-image,
+.hero-image {
+  width: 100% !important;
+  max-width: 18rem !important;   /* ~288px on small screens — compact */
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* Compact video container */
+.video-section { padding-bottom: 1.2rem !important; }
+.video-shell {
+  width: 100% !important;
+  max-width: 640px !important;   /* desktop cap lowered to 640 */
+  margin: 0 auto !important;
+}
+
+/* Smaller radius + lighter shadow so the player feels less dominant */
+.video-frame {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35) !important;
+  border: 1px solid rgba(255,255,255,0.02) !important;
+}
+
+/* Make the video visually tighter */
+.video-element { object-fit: cover !important; }
+
+/* Tighter utilities */
+.video-utilities { margin-top: .4rem !important; font-size: .82rem !important; }
+
+/* Responsive: still compact but allow modest growth on large screens */
+@media (min-width: 640px) {
+  .site-header .site-logo { max-width: 130px !important; }
+  .hero-image { max-width: 22rem !important; } /* ~352px */
+  .video-shell { max-width: 720px !important; }
+}
+@media (min-width: 1024px) {
+  .site-header .site-logo { max-width: 150px !important; }
+  .hero-image { max-width: 28rem !important; } /* ~448px */
+  .video-shell { max-width: 820px !important; }
 }
 
 /* small helpers */
