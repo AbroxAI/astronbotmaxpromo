@@ -1,135 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AstronBot Max</title>
 
-  <!-- main stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind helpers (optional) -->
-  <script src="https://cdn.tailwindcss.com" defer></script>
-
-  <style>
-    /* small hero fade (keeps your original animation) */
-    @media (prefers-reduced-motion: no-preference) {
-      .hero-fade { opacity: 0; transform: translateY(6px);
-                   animation: heroFade 400ms ease-out forwards; animation-delay: 120ms; }
-      @keyframes heroFade { to { opacity: 1; transform: translateY(0);} }
+  <!-- Tailwind config (kept inline for GitHub Pages simplicity) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bgDark: '#05070a',
+          }
+        }
+      }
     }
-  </style>
+  </script>
 </head>
 
-<body class="bg-black text-white">
+<body class="min-h-screen bg-gradient-to-b from-[#03060a] via-[#050a12] to-[#020407] text-[#e6e8eb] font-sans relative">
 
-  <!-- skip link for accessibility -->
-  <a class="sr-only-focusable" href="#main">Skip to content</a>
+  <!-- Noise overlay -->
+  <div class="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
+       style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E&quot;)">
+  </div>
 
-  <!-- HEADER (anchored, compact) -->
-  <header class="site-header w-full flex justify-center items-center pt-5 pb-2 px-4" role="banner">
-    <img
-      src="assets/logo.png"
-      alt="AstronBot Max logo"
-      class="site-logo"
-      decoding="async" loading="eager"
-    />
-  </header>
+  <!-- PAGE CONTENT -->
+  <div class="relative z-10">
 
-  <main id="main" role="main">
+    <!-- LOGO -->
+    <header class="flex justify-center pt-4 pb-1 px-4">
+      <img
+        src="assets/logo.png"
+        alt="AstronBot Max Logo"
+        class="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[380px] h-auto"
+        loading="eager"
+      />
+    </header>
 
-    <!-- HERO (compact) -->
-    <section class="hero px-4" aria-labelledby="hero-title">
+    <!-- HERO -->
+    <section class="flex justify-center px-4">
       <img
         src="assets/hero.png"
-        alt="AstronBot Max — product hero"
-        class="hero-fade hero-image"
-        decoding="async" loading="lazy"
+        alt="AstronBot Max Hero"
+        class="w-full max-w-[24rem] sm:max-w-[36rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto mb-2"
+        loading="lazy"
       />
     </section>
 
-    <!-- VIDEO (compact, grouped with hero) -->
-    <section class="video-section px-4 pb-14">
-      <div class="video-shell">
+    <!-- VIDEO SECTION -->
+    <section class="flex justify-center px-4 mt-2">
+      <div class="w-full max-w-[320px] sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
 
-        <!-- Video frame: use poster.jpg if you have one -->
-        <div class="video-frame" aria-label="Product demo video">
+        <!-- Video frame -->
+        <div class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
           <video
             id="demoVideo"
             src="assets/demo.mp4"
-            poster="assets/poster.jpg"
             controls
             preload="metadata"
-            class="video-element"
+            class="w-full h-full object-contain"
           ></video>
         </div>
 
         <!-- Player utilities -->
-        <div class="video-utilities" role="toolbar" aria-label="Video playback controls">
-          <div class="speed-group">
-            <label for="speedSelect" class="sr-only">Playback speed</label>
-            <select id="speedSelect" class="speed-select" aria-label="Playback speed">
+        <div class="flex justify-between items-center mt-2 text-sm text-white/60">
+          <div class="flex items-center gap-2">
+            <select
+              class="bg-transparent border border-white/10 rounded-md px-2 py-1 text-white/80 focus:outline-none"
+              onchange="document.getElementById('demoVideo').playbackRate = this.value"
+            >
               <option value="0.75">0.75×</option>
               <option value="1" selected>1×</option>
               <option value="1.25">1.25×</option>
               <option value="1.5">1.5×</option>
               <option value="2">2×</option>
             </select>
-            <span class="speed-label">Speed</span>
+            <span class="text-white/50">Speed</span>
           </div>
 
-          <a href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue" class="report-link">
+          <a
+            href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue"
+            class="hover:text-white transition"
+          >
             Report issue
           </a>
         </div>
-
       </div>
     </section>
 
-  </main>
+    <!-- FOOTER -->
+    <footer class="mt-6 border-t border-white/10 bg-gradient-to-t from-black/40 to-transparent">
+      <p class="text-center text-[0.85rem] text-white/60 py-3 tracking-wide">
+        © 2026 AstronBot Max. All rights reserved.
+      </p>
+    </footer>
 
-  <!-- FOOTER -->
-  <footer class="site-footer" role="contentinfo">
-    <p>© 2026 AstronBot Max. All rights reserved.</p>
-  </footer>
-
-  <!-- Small runtime script: sets playback rate, persists it, improves keyboard focus UX -->
-  <script>
-    (function () {
-      const video = document.getElementById('demoVideo');
-      const speedSelect = document.getElementById('speedSelect');
-
-      // Restore saved speed or default to 1
-      try {
-        const saved = localStorage.getItem('abm_playback_rate');
-        if (saved) { video.playbackRate = parseFloat(saved); }
-      } catch (e) { /* ignore storage errors */ }
-
-      // Sync select with video rate
-      function syncSelect() {
-        const rate = String(video.playbackRate || 1);
-        for (const opt of speedSelect.options) {
-          if (opt.value === rate) { opt.selected = true; break; }
-        }
-      }
-      syncSelect();
-
-      // On user change, update video and persist
-      speedSelect.addEventListener('change', function () {
-        const r = parseFloat(this.value) || 1;
-        video.playbackRate = r;
-        try { localStorage.setItem('abm_playback_rate', String(r)); } catch (e) {}
-      });
-
-      // Also keep select synced if user changes rate from native controls / keyboard
-      video.addEventListener('ratechange', syncSelect);
-
-      // Improve keyboard focus for the skip link
-      document.querySelectorAll('.sr-only-focusable').forEach(el => {
-        el.addEventListener('click', () => { el.classList.add('focused'); });
-      });
-    })();
-  </script>
-
+  </div>
 </body>
 </html>
