@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AstronBot Max</title>
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind config (kept inline for GitHub Pages simplicity) -->
   <script>
     tailwind.config = {
       theme: {
@@ -25,39 +23,39 @@
 <body class="min-h-screen bg-gradient-to-b from-[#03060a] via-[#050a12] to-[#020407] text-[#e6e8eb] font-sans relative">
 
   <!-- Noise overlay -->
-  <div class="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
-       style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E&quot;)">
-  </div>
+  <div
+    class="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
+    style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E&quot;)"
+  ></div>
 
-  <!-- PAGE CONTENT -->
   <div class="relative z-10">
 
-    <!-- LOGO -->
-    <header class="flex justify-center pt-4 pb-1 px-4">
+    <!-- LOGO (tighter mobile) -->
+    <header class="flex justify-center pt-3 pb-1 px-4">
       <img
         src="assets/logo.png"
         alt="AstronBot Max Logo"
-        class="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[320px] lg:max-w-[380px] h-auto"
+        class="w-full max-w-[170px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px] h-auto"
         loading="eager"
       />
     </header>
 
-    <!-- HERO -->
+    <!-- HERO (reduced dominance on mobile) -->
     <section class="flex justify-center px-4">
       <img
         src="assets/hero.png"
         alt="AstronBot Max Hero"
-        class="w-full max-w-[24rem] sm:max-w-[36rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto mb-2"
+        class="w-full max-w-[20rem] sm:max-w-[32rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto mb-1 sm:mb-2"
         loading="lazy"
       />
     </section>
 
-    <!-- VIDEO SECTION -->
-    <section class="flex justify-center px-4 mt-2">
-      <div class="w-full max-w-[320px] sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
+    <!-- VIDEO SECTION (mobile-first) -->
+    <section class="flex justify-center px-3 sm:px-4 mt-2">
+      <div class="w-full max-w-full sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
 
         <!-- Video frame -->
-        <div class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+        <div class="relative aspect-video rounded-lg sm:rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.5)]">
           <video
             id="demoVideo"
             src="assets/demo.mp4"
@@ -67,11 +65,11 @@
           ></video>
         </div>
 
-        <!-- Player utilities -->
-        <div class="flex justify-between items-center mt-2 text-sm text-white/60">
+        <!-- Player utilities (stack on mobile) -->
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mt-2 text-sm text-white/60">
           <div class="flex items-center gap-2">
             <select
-              class="bg-transparent border border-white/10 rounded-md px-2 py-1 text-white/80 focus:outline-none"
+              class="bg-transparent border border-white/10 rounded-md px-3 py-1.5 text-white/80 focus:outline-none"
               onchange="document.getElementById('demoVideo').playbackRate = this.value"
             >
               <option value="0.75">0.75×</option>
@@ -85,7 +83,7 @@
 
           <a
             href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue"
-            class="hover:text-white transition"
+            class="hover:text-white transition self-start sm:self-auto"
           >
             Report issue
           </a>
@@ -93,9 +91,9 @@
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="mt-6 border-t border-white/10 bg-gradient-to-t from-black/40 to-transparent">
-      <p class="text-center text-[0.85rem] text-white/60 py-3 tracking-wide">
+    <!-- FOOTER (compact mobile) -->
+    <footer class="mt-4 sm:mt-6 border-t border-white/10 bg-gradient-to-t from-black/40 to-transparent">
+      <p class="text-center text-[0.8rem] sm:text-[0.85rem] text-white/60 py-2 sm:py-3 tracking-wide">
         © 2026 AstronBot Max. All rights reserved.
       </p>
     </footer>
