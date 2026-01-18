@@ -5,34 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AstronBot Max</title>
 
-  <!-- Your original CSS (untouched background & footer) -->
+  <!-- Locked background + footer styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Tailwind for layout control only -->
+  <!-- Tailwind Utilities (layout only) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Subtle premium fade-in -->
+  <!-- Subtle hero fade-in -->
   <style>
     @media (prefers-reduced-motion: no-preference) {
-      .fade-in {
+      .hero-fade {
         opacity: 0;
-        transform: translateY(6px);
-        animation: fadeIn 420ms ease-out forwards;
+        transform: translateY(4px);
+        animation: heroFade 420ms ease-out forwards;
       }
-      @keyframes fadeIn {
+      @keyframes heroFade {
         to { opacity: 1; transform: translateY(0); }
       }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-fade { opacity: 1; transform: none; animation: none; }
     }
   </style>
 </head>
 <body>
 
   <!-- LOGO -->
-  <header class="w-full flex justify-center pt-6 pb-2 px-4 relative z-10">
+  <header class="w-full flex justify-center pt-6 pb-2 px-4">
     <img
       src="assets/logo.png"
       alt="AstronBot Max Logo"
-      class="w-full max-w-[240px] sm:max-w-[300px] md:max-w-[340px] lg:max-w-[380px] h-auto"
+      class="w-full max-w-[240px] sm:max-w-[300px] md:max-w-[340px] lg:max-w-[380px] h-auto mx-auto"
+      loading="eager"
+      decoding="async"
     />
   </header>
 
@@ -41,15 +46,17 @@
     <img
       src="assets/hero.png"
       alt="AstronBot Max Hero"
-      class="fade-in w-full max-w-[26rem] sm:max-w-[42rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto"
+      class="hero-fade w-full max-w-[26rem] sm:max-w-[42rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto"
+      loading="lazy"
+      decoding="async"
     />
   </section>
 
-  <!-- VIDEO (tight psychological connection to hero) -->
-  <section class="w-full flex justify-center px-4 -mt-6 sm:-mt-10 md:-mt-14 relative z-10">
+  <!-- VIDEO (closer spacing for narrative flow) -->
+  <section class="w-full flex justify-center px-4 mt-3 sm:mt-4 md:mt-5 lg:mt-6 relative z-10">
     <div class="w-full max-w-[320px] sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
 
-      <div class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_25px_70px_rgba(0,0,0,0.55)]">
+      <div class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
         <video
           src="assets/demo.mp4"
           controls
@@ -58,27 +65,31 @@
         ></video>
       </div>
 
-      <!-- Minimal premium controls -->
+      <!-- Controls (speed & report) -->
       <div class="flex justify-between items-center mt-2 text-sm text-white/60">
-        <select
-          class="bg-transparent border border-white/10 rounded-md px-2 py-1 text-white/80"
-          onchange="this.closest('section').querySelector('video').playbackRate = this.value"
-        >
-          <option value="0.75">0.75×</option>
-          <option value="1" selected>1×</option>
-          <option value="1.25">1.25×</option>
-          <option value="1.5">1.5×</option>
-          <option value="2">2×</option>
-        </select>
+
+        <div class="flex items-center gap-2">
+          <select
+            class="bg-transparent border border-white/10 rounded-md px-2 py-1 text-white/80"
+            onchange="document.getElementById('demoVideo').playbackRate = this.value"
+          >
+            <option value="0.75">0.75×</option>
+            <option value="1" selected>1×</option>
+            <option value="1.25">1.25×</option>
+            <option value="1.5">1.5×</option>
+            <option value="2">2×</option>
+          </select>
+          <span class="text-white/50">Speed</span>
+        </div>
 
         <a
-          href="mailto:support@astronbotmax.com?subject=Video%20Issue"
+          href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue"
           class="hover:text-white transition"
         >
           Report issue
         </a>
-      </div>
 
+      </div>
     </div>
   </section>
 
