@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AstronBot Max</title>
 
-  <!-- Locked background + footer styles -->
+  <!-- Keep your background+footer styles untouched -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Tailwind (layout utilities only) -->
+  <!-- Tailwind for layout utilities -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Subtle premium hero fade-in -->
+  <!-- Subtle fade-in animation for hero -->
   <style>
     @media (prefers-reduced-motion: no-preference) {
       .hero-fade {
@@ -24,12 +24,15 @@
         to { opacity: 1; transform: translateY(0); }
       }
     }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-fade { opacity: 1; transform: none; animation: none; }
+    }
   </style>
 </head>
 <body>
 
   <!-- LOGO -->
-  <header class="w-full flex justify-center pt-6 pb-1 px-4 relative z-10">
+  <header class="w-full flex justify-center pt-6 pb-1 px-4">
     <img
       src="assets/logo.png"
       alt="AstronBot Max Logo"
@@ -44,14 +47,14 @@
     <img
       src="assets/hero.png"
       alt="AstronBot Max Hero"
-      class="hero-fade w-full max-w-[22rem] sm:max-w-[36rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto select-none pointer-events-none"
+      class="hero-fade w-full max-w-[24rem] sm:max-w-[40rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto select-none pointer-events-none"
       loading="lazy"
       decoding="async"
     />
   </section>
 
   <!-- VIDEO SECTION -->
-  <section class="w-full flex justify-center px-4 mt-8 sm:mt-10 md:mt-12 lg:mt-14 relative z-10">
+  <section class="w-full flex justify-center px-4 mt-4 sm:mt-6 md:mt-8 lg:mt-10 relative z-10">
     <div class="w-full max-w-[320px] sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
 
       <!-- Video Frame -->
@@ -65,8 +68,8 @@
         ></video>
       </div>
 
-      <!-- Video Utility Bar -->
-      <div class="flex items-center justify-between mt-3 text-sm text-white/60">
+      <!-- Video Controls -->
+      <div class="flex items-center justify-between mt-2 text-sm text-white/60">
 
         <!-- Playback Speed -->
         <div class="flex items-center gap-2">
@@ -83,7 +86,7 @@
           <span class="text-white/50">Speed</span>
         </div>
 
-        <!-- Report Issue -->
+        <!-- Report Playback Issue -->
         <a
           href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue"
           class="hover:text-white transition"
