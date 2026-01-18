@@ -18,7 +18,7 @@
     }
   </script>
 
-  <!-- Desktop-only auto-hide controls -->
+  <!-- Desktop-only auto-hide controls + animations -->
   <style>
     @media (hover: hover) {
       video::-webkit-media-controls {
@@ -28,6 +28,26 @@
       .aspect-video:hover video::-webkit-media-controls {
         opacity: 1;
       }
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .fade-in.ready {
+      opacity: 1;
+    }
+
+    /* Subtle glow while playing */
+    .glow {
+      box-shadow: 0 0 0 rgba(255,255,255,0);
+      transition: box-shadow 0.4s ease;
+    }
+    .glow.active {
+      box-shadow:
+        0 0 24px rgba(255,255,255,0.08),
+        0 0 60px rgba(255,255,255,0.05);
     }
   </style>
 </head>
@@ -68,22 +88,34 @@
 
         <!-- Video Wrapper -->
         <div
-          class="relative aspect-video rounded-lg sm:rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.5)] cursor-pointer"
-          onclick="toggleVideo(event)"
+          id="videoWrapper"
+          class="relative aspect-video rounded-lg sm:rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.5)] cursor-pointer fade-in glow"
+          onclick="toggleVideo()"
         >
           <video
             id="demoVideo"
             src="assets/demo.mp4"
             poster="assets/poster.jpg"
+            autoplay
+            muted
+            playsinline
             controls
-            preload="metadata"
+            preload="auto"
             class="w-full h-full object-contain"
           ></video>
 
-          <!-- Pulsing Play Overlay -->
+          <!-- Loading Spinner -->
+          <div
+            id="loadingSpinner"
+            class="absolute inset-0 flex items-center justify-center bg-black/60"
+          >
+            <div class="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+          </div>
+
+          <!-- Play Overlay -->
           <div
             id="playOverlay"
-            class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity"
+            class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity pointer-events-none"
           >
             <div class="relative">
               <div class="absolute inset-0 rounded-full bg-white/40 animate-ping"></div>
@@ -94,6 +126,14 @@
               </div>
             </div>
           </div>
+
+          <!-- Unmute Hint -->
+          <div
+            id="unmuteHint"
+            class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur opacity-0 transition-opacity pointer-events-none"
+          >
+            Tap to unmute 🔊
+          </div>
         </div>
 
         <!-- Video Utilities -->
@@ -101,7 +141,7 @@
           <div class="flex items-center gap-2">
             <select
               class="bg-transparent border border-white/10 rounded-md px-3 py-1.5 text-white/80 focus:outline-none"
-              onchange="document.getElementById('demoVideo').playbackRate = this.value"
+              onchange="demoVideo.playbackRate = this.value"
             >
               <option value="0.75">0.75×</option>
               <option value="1" selected>1×</option>
@@ -136,24 +176,46 @@
   <script>
     const video = document.getElementById('demoVideo');
     const overlay = document.getElementById('playOverlay');
+    const spinner = document.getElementById('loadingSpinner');
+    const unmuteHint = document.getElementById('unmuteHint');
+    const wrapper = document.getElementById('videoWrapper');
 
-    function toggleVideo(e) {
-      // Prevent toggling when clicking native controls
-      if (e.target.tagName === 'VIDEO' && e.offsetY > video.clientHeight - 40) {
-        return;
+    function toggleVideo() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
       }
 
-      video.paused ? video.play() : video.pause();
+      if (video.muted) {
+        video.muted = false;
+        unmuteHint.style.opacity = '0';
+      }
     }
+
+    video.addEventListener('canplay', () => {
+      spinner.style.display = 'none';
+      wrapper.classList.add('ready');
+    });
 
     video.addEventListener('play', () => {
       overlay.style.opacity = '0';
-      overlay.style.pointerEvents = 'none';
+      wrapper.classList.add('active');
+      if (video.muted) {
+        unmuteHint.style.opacity = '1';
+      }
     });
 
     video.addEventListener('pause', () => {
       overlay.style.opacity = '1';
-      overlay.style.pointerEvents = 'auto';
+      wrapper.classList.remove('active');
+      unmuteHint.style.opacity = '0';
+    });
+
+    video.addEventListener('volumechange', () => {
+      if (!video.muted) {
+        unmuteHint.style.opacity = '0';
+      }
     });
   </script>
 
