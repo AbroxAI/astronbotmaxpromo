@@ -8,10 +8,10 @@
   <!-- Locked styles (UNCHANGED) -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Tailwind CDN — layout & responsive utilities only -->
+  <!-- Tailwind CDN — only used for layout & responsive utilities -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Inline, tiny animation (respects reduced-motion). Keeps style.css untouched. -->
+  <!-- Tiny inline animation (non-invasive). Respects reduced-motion preference. -->
   <style>
     @media (prefers-reduced-motion: no-preference) {
       .hero-fade {
@@ -31,21 +31,21 @@
 </head>
 <body>
 
-  <!-- LOGO: scaled to be clearly visible on phones and proportional on larger screens -->
+  <!-- LOGO: sized by responsive max-widths so it reads clearly on phones and scales proportionally -->
   <header class="w-full flex justify-center pt-8 pb-2 relative z-10 px-4">
     <img
       src="assets/logo.png"
       alt="AstronBot Max Logo"
-      class="w-auto h-24 sm:h-28 md:h-32 lg:h-36 xl:h-40 mx-auto select-none pointer-events-auto"
+      class="w-full max-w-[280px] sm:max-w-[380px] md:max-w-[520px] lg:max-w-[680px] xl:max-w-[840px] h-auto mx-auto select-none pointer-events-auto"
       loading="eager"
       decoding="async"
     />
   </header>
 
   <!-- HERO SECTION:
-       - Uses your .hero CSS (70vh block) but aligns content to the top so the image sits under the logo.
-       - Responsive max-widths tuned for a wide/text-heavy hero.
-       - hero-fade provides a short, premium fade-up (respects reduced-motion).
+       - Uses your .hero CSS (70vh stage) but aligns content to the top so the image sits under the logo.
+       - Responsive max-widths tuned for a wide, text-heavy hero to keep text readable.
+       - hero-fade gives a short premium fade-up (respects reduced-motion).
   -->
   <section class="hero items-start pt-4 sm:pt-6 md:pt-8 lg:pt-10 px-4">
     <img
