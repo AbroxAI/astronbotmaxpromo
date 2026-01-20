@@ -30,7 +30,6 @@
       }
     }
 
-    /* Fade-in animation */
     .fade-in {
       opacity: 0;
       transition: opacity 0.6s ease;
@@ -39,7 +38,6 @@
       opacity: 1;
     }
 
-    /* Subtle glow while playing */
     .glow {
       box-shadow: 0 0 0 rgba(255,255,255,0);
       transition: box-shadow 0.4s ease;
@@ -55,129 +53,101 @@
 <body class="min-h-screen bg-gradient-to-b from-[#03060a] via-[#050a12] to-[#020407] text-[#e6e8eb] font-sans relative">
 
   <!-- Noise overlay -->
-  <div
-    class="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
-    style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E&quot;)"
-  ></div>
+  <div class="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
+    style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E&quot;)">
+  </div>
 
   <div class="relative z-10">
 
     <!-- LOGO -->
     <header class="flex justify-center pt-3 pb-1 px-4">
-      <img
-        src="assets/logo.png"
-        alt="AstronBot Max Logo"
-        class="w-full max-w-[170px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px] h-auto"
-        loading="eager"
-      />
+      <img src="assets/logo.png" alt="AstronBot Max Logo"
+        class="w-full max-w-[170px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]"
+        loading="eager" />
     </header>
 
     <!-- HERO -->
     <section class="flex justify-center px-4">
-      <img
-        src="assets/hero.png"
-        alt="AstronBot Max Hero"
-        class="w-full max-w-[20rem] sm:max-w-[32rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl h-auto mx-auto mb-1 sm:mb-2"
-        loading="lazy"
-      />
+      <img src="assets/hero.png" alt="AstronBot Max Hero"
+        class="w-full max-w-[20rem] sm:max-w-[32rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mb-1 sm:mb-2"
+        loading="lazy" />
     </section>
 
-    <!-- VIDEO SECTION -->
+    <!-- VIDEO -->
     <section class="flex justify-center px-3 sm:px-4 mt-2">
-      <div class="w-full max-w-full sm:max-w-[560px] md:max-w-[720px] lg:max-w-[900px] xl:max-w-[1024px]">
+      <div class="w-full max-w-[1024px]">
 
-        <!-- Video Wrapper -->
-        <div
-          id="videoWrapper"
-          class="relative aspect-video rounded-lg sm:rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.5)] cursor-pointer fade-in glow"
-          onclick="toggleVideo()"
-        >
-          <video
-            id="demoVideo"
+        <div id="videoWrapper"
+          class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.5)] cursor-pointer fade-in glow"
+          onclick="toggleVideo()">
+
+          <video id="demoVideo"
             src="assets/demo.mp4"
             poster="assets/poster.jpg"
-            autoplay
             muted
             playsinline
             controls
             preload="auto"
-            class="w-full h-full object-contain"
-          ></video>
+            class="w-full h-full object-contain"></video>
 
-          <!-- Loading Spinner -->
-          <div
-            id="loadingSpinner"
-            class="absolute inset-0 flex items-center justify-center bg-black/60"
-          >
+          <!-- Spinner -->
+          <div id="loadingSpinner"
+            class="absolute inset-0 flex items-center justify-center bg-black/60">
             <div class="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
           </div>
 
-          <!-- Play Overlay -->
-          <div
-            id="playOverlay"
-            class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity pointer-events-none"
-          >
+          <!-- Play overlay -->
+          <div id="playOverlay"
+            class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity pointer-events-none">
             <div class="relative">
               <div class="absolute inset-0 rounded-full bg-white/40 animate-ping"></div>
               <div class="relative w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-xl">
-                <svg class="w-7 h-7 text-black ml-1" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
+                ▶
               </div>
             </div>
           </div>
-
-          <!-- Unmute Hint -->
-          <div
-            id="unmuteHint"
-            class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-3 py-1.5 rounded-full backdrop-blur opacity-0 transition-opacity pointer-events-none"
-          >
-            Tap to unmute 🔊
-          </div>
         </div>
 
-        <!-- Video Utilities -->
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mt-2 text-sm text-white/60">
-          <div class="flex items-center gap-2">
-            <select
-              class="bg-transparent border border-white/10 rounded-md px-3 py-1.5 text-white/80 focus:outline-none"
-              onchange="demoVideo.playbackRate = this.value"
-            >
-              <option value="0.75">0.75×</option>
-              <option value="1" selected>1×</option>
-              <option value="1.25">1.25×</option>
-              <option value="1.5">1.5×</option>
-              <option value="2">2×</option>
-            </select>
-            <span class="text-white/50">Speed</span>
-          </div>
+        <!-- CTA BUTTONS -->
+        <div class="mt-6 flex flex-col gap-4">
 
-          <a
-            href="mailto:support@astronbotmax.com?subject=Video%20Playback%20Issue"
-            class="hover:text-white transition self-start sm:self-auto"
-          >
-            Report issue
+          <!-- BUY NOW -->
+          <a href="#checkout"
+            class="block text-center font-semibold text-lg py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:brightness-110 transition shadow-lg">
+            BUY NOW – $500 LIFETIME
           </a>
+
+          <!-- Bonus text -->
+          <p class="text-center text-sm text-green-400">
+            ✅ Includes <strong>$50 free trading capital</strong> (limited bonus)
+          </p>
+
+          <!-- WhatsApp -->
+          <a href="https://wa.me/XXXXXXXXXX"
+            class="flex items-center justify-center gap-3 py-3 rounded-xl bg-green-600 hover:bg-green-500 transition shadow-md">
+            <img src="assets/whatsapp.png" alt="WhatsApp" class="w-6 h-6">
+            <span class="font-medium">WhatsApp Support</span>
+          </a>
+
         </div>
 
       </div>
     </section>
 
     <!-- FOOTER -->
-    <footer class="mt-4 sm:mt-6 border-t border-white/10 bg-gradient-to-t from-black/40 to-transparent">
-      <p class="text-center text-[0.8rem] sm:text-[0.85rem] text-white/60 py-2 sm:py-3 tracking-wide">
+    <footer class="mt-8 border-t border-white/10">
+      <p class="text-center text-sm text-white/60 py-4">
         © 2026 AstronBot Max. All rights reserved.
       </p>
     </footer>
 
   </div>
 
-  <!-- Video Logic -->
+  <!-- Video logic -->
   <script>
     const video = document.getElementById('demoVideo');
-    const overlay = document.getElementById('playOverlay');
     const spinner = document.getElementById('loadingSpinner');
-    const unmuteHint = document.getElementById('unmuteHint');
+    const overlay = document.getElementById('playOverlay');
     const wrapper = document.getElementById('videoWrapper');
 
     function toggleVideo() {
@@ -185,11 +155,6 @@
         video.play();
       } else {
         video.pause();
-      }
-
-      if (video.muted) {
-        video.muted = false;
-        unmuteHint.style.opacity = '0';
       }
     }
 
@@ -201,21 +166,11 @@
     video.addEventListener('play', () => {
       overlay.style.opacity = '0';
       wrapper.classList.add('active');
-      if (video.muted) {
-        unmuteHint.style.opacity = '1';
-      }
     });
 
     video.addEventListener('pause', () => {
       overlay.style.opacity = '1';
       wrapper.classList.remove('active');
-      unmuteHint.style.opacity = '0';
-    });
-
-    video.addEventListener('volumechange', () => {
-      if (!video.muted) {
-        unmuteHint.style.opacity = '0';
-      }
     });
   </script>
 
