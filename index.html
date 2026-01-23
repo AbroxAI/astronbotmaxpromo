@@ -61,72 +61,105 @@
 
     <!-- LOGO -->
     <header class="flex justify-center pt-3 pb-1 px-4">
-      <img src="assets/logo.png" alt="AstronBot Max Logo"
+      <img
+        src="assets/logo.png"
+        alt="AstronBot Max Logo"
         class="w-full max-w-[170px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]"
-        loading="eager" />
+        loading="eager"
+      />
     </header>
 
     <!-- HERO -->
     <section class="flex justify-center px-4">
-      <img src="assets/hero.png" alt="AstronBot Max Hero"
+      <img
+        src="assets/hero.png"
+        alt="AstronBot Max Hero"
         class="w-full max-w-[20rem] sm:max-w-[32rem] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mb-1 sm:mb-2"
-        loading="lazy" />
+        loading="lazy"
+      />
     </section>
 
     <!-- VIDEO -->
     <section class="flex justify-center px-3 sm:px-4 mt-2">
       <div class="w-full max-w-[1024px]">
 
-        <div id="videoWrapper"
+        <div
+          id="videoWrapper"
           class="relative aspect-video rounded-xl overflow-hidden bg-black border border-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.5)] cursor-pointer fade-in glow"
-          onclick="toggleVideo()">
+          onclick="toggleVideo()"
+        >
 
-          <video id="demoVideo"
+          <video
+            id="demoVideo"
             src="assets/demo.mp4"
             poster="assets/poster.jpg"
             muted
             playsinline
             controls
             preload="auto"
-            class="w-full h-full object-contain"></video>
+            class="w-full h-full object-contain"
+          ></video>
 
-          <!-- Spinner -->
-          <div id="loadingSpinner"
-            class="absolute inset-0 flex items-center justify-center bg-black/60">
+          <!-- Loading spinner -->
+          <div
+            id="loadingSpinner"
+            class="absolute inset-0 flex items-center justify-center bg-black/60"
+          >
             <div class="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
           </div>
 
           <!-- Play overlay -->
-          <div id="playOverlay"
-            class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity pointer-events-none">
+          <div
+            id="playOverlay"
+            class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity pointer-events-none"
+          >
             <div class="relative">
               <div class="absolute inset-0 rounded-full bg-white/40 animate-ping"></div>
-              <div class="relative w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-xl">
+              <div class="relative w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-xl text-black text-xl font-bold">
                 ▶
               </div>
             </div>
           </div>
+
+          <!-- Tap to unmute hint -->
+          <div
+            id="unmuteHint"
+            class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs sm:text-sm px-4 py-1.5 rounded-full backdrop-blur opacity-0 transition-opacity pointer-events-none"
+          >
+            🔊 Tap to unmute
+          </div>
+
         </div>
 
         <!-- CTA BUTTONS -->
-        <div class="mt-6 flex flex-col gap-4">
+        <div class="mt-6 sm:mt-8 flex flex-col gap-4 sm:gap-5">
 
           <!-- BUY NOW -->
-          <a href="#checkout"
-            class="block text-center font-semibold text-lg py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:brightness-110 transition shadow-lg">
+          <a
+            href="#checkout"
+            class="block text-center font-semibold text-base sm:text-lg py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:brightness-110 transition shadow-lg"
+          >
             BUY NOW – $500 LIFETIME
           </a>
 
-          <!-- Bonus text -->
-          <p class="text-center text-sm text-green-400">
+          <!-- Bonus -->
+          <p class="text-center text-sm sm:text-[0.95rem] text-green-400">
             ✅ Includes <strong>$50 free trading capital</strong> (limited bonus)
           </p>
 
           <!-- WhatsApp -->
-          <a href="https://wa.me/XXXXXXXXXX"
-            class="flex items-center justify-center gap-3 py-3 rounded-xl bg-green-600 hover:bg-green-500 transition shadow-md">
-            <img src="assets/whatsapp.png" alt="WhatsApp" class="w-6 h-6">
-            <span class="font-medium">WhatsApp Support</span>
+          <a
+            href="https://wa.me/XXXXXXXXXX"
+            class="flex items-center justify-center gap-3 py-3 sm:py-3.5 rounded-xl bg-green-600 hover:bg-green-500 transition shadow-md"
+          >
+            <img
+              src="assets/whatsapp.jpg"
+              alt="WhatsApp Business"
+              class="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+            />
+            <span class="font-medium text-sm sm:text-base">
+              WhatsApp Support
+            </span>
           </a>
 
         </div>
@@ -149,12 +182,18 @@
     const spinner = document.getElementById('loadingSpinner');
     const overlay = document.getElementById('playOverlay');
     const wrapper = document.getElementById('videoWrapper');
+    const unmuteHint = document.getElementById('unmuteHint');
 
     function toggleVideo() {
       if (video.paused) {
         video.play();
       } else {
         video.pause();
+      }
+
+      if (video.muted) {
+        video.muted = false;
+        unmuteHint.style.opacity = '0';
       }
     }
 
@@ -166,11 +205,21 @@
     video.addEventListener('play', () => {
       overlay.style.opacity = '0';
       wrapper.classList.add('active');
+      if (video.muted) {
+        unmuteHint.style.opacity = '1';
+      }
     });
 
     video.addEventListener('pause', () => {
       overlay.style.opacity = '1';
       wrapper.classList.remove('active');
+      unmuteHint.style.opacity = '0';
+    });
+
+    video.addEventListener('volumechange', () => {
+      if (!video.muted) {
+        unmuteHint.style.opacity = '0';
+      }
     });
   </script>
 
