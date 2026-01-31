@@ -100,7 +100,6 @@
             class="w-full h-full object-contain"
           ></video>
 
-          <!-- Loading spinner -->
           <div
             id="loadingSpinner"
             class="absolute inset-0 flex items-center justify-center bg-black/60"
@@ -108,7 +107,6 @@
             <div class="w-10 h-10 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
           </div>
 
-          <!-- Play overlay -->
           <div
             id="playOverlay"
             class="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity pointer-events-none"
@@ -121,7 +119,6 @@
             </div>
           </div>
 
-          <!-- Tap to unmute hint -->
           <div
             id="unmuteHint"
             class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs sm:text-sm px-4 py-1.5 rounded-full backdrop-blur opacity-0 transition-opacity pointer-events-none"
@@ -134,10 +131,18 @@
         <!-- CTA BUTTONS -->
         <div class="mt-6 sm:mt-8 flex flex-col gap-4 sm:gap-5">
 
-          <!-- BUY NOW -->
+          <!-- BUY NOW (Primary) -->
           <a
             href="#checkout"
-            class="block text-center font-semibold text-base sm:text-lg py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 hover:brightness-110 transition shadow-lg"
+            class="block w-full text-center
+                   font-extrabold tracking-tight
+                   text-lg sm:text-xl
+                   py-4 sm:py-5
+                   rounded-xl
+                   bg-gradient-to-r from-green-500 to-emerald-600
+                   hover:brightness-110 transition
+                   shadow-[0_12px_30px_rgba(0,0,0,0.45)]
+                   active:scale-[0.99]"
           >
             BUY NOW – $500 LIFETIME
           </a>
@@ -147,10 +152,14 @@
             ✅ Includes <strong>$50 free trading capital</strong> (limited bonus)
           </p>
 
-          <!-- WhatsApp -->
+          <!-- WhatsApp (Secondary) -->
           <a
             href="https://wa.me/XXXXXXXXXX"
-            class="flex items-center justify-center gap-3 py-3 sm:py-3.5 rounded-xl bg-green-600 hover:bg-green-500 transition shadow-md"
+            class="flex w-full items-center justify-center gap-3
+                   py-3.5 sm:py-4
+                   rounded-xl
+                   bg-green-600 hover:bg-green-500 transition
+                   shadow-md"
           >
             <img
               src="assets/whatsapp.jpg"
@@ -205,9 +214,7 @@
     video.addEventListener('play', () => {
       overlay.style.opacity = '0';
       wrapper.classList.add('active');
-      if (video.muted) {
-        unmuteHint.style.opacity = '1';
-      }
+      if (video.muted) unmuteHint.style.opacity = '1';
     });
 
     video.addEventListener('pause', () => {
@@ -217,9 +224,7 @@
     });
 
     video.addEventListener('volumechange', () => {
-      if (!video.muted) {
-        unmuteHint.style.opacity = '0';
-      }
+      if (!video.muted) unmuteHint.style.opacity = '0';
     });
   </script>
 
