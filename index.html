@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>TaskEarn Pro – VIP 3 Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f0f4f9; padding: 16px; color: #1a2c3e; }
+        .container { max-width: 550px; margin: 0 auto; background: #ffffff; border-radius: 36px; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.12); overflow: hidden; }
+        .auth-container { padding: 32px 24px; background: white; }
+        .logo-area { text-align: center; margin-bottom: 28px; }
+        .logo-area img { max-height: 60px; width: auto; margin-bottom: 10px; }
+        .logo-area h1 { font-size: 1.8rem; font-weight: 700; color: #0a2b3d; }
+        .logo-area p { color: #5e6f8d; font-size: 0.85rem; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.85rem; }
+        .input-group input { width: 100%; padding: 14px 16px; border: 1px solid #dce3ec; border-radius: 30px; font-size: 0.9rem; outline: none; transition: 0.15s; }
+        .input-group input:focus { border-color: #0f2b3d; }
+        .error-text { color: #d32f2f; font-size: 0.7rem; margin-top: 4px; display: block; }
+        .note-text { font-size: 0.7rem; color: #5e6f8d; margin-top: 4px; }
+        .auth-btn { background: #0f2b3d; color: white; border: none; width: 100%; padding: 14px; border-radius: 40px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .auth-btn:hover { background: #1e4b62; }
+        .auth-footer { text-align: center; margin-top: 20px; font-size: 0.8rem; }
+        .auth-footer a { color: #0f2b3d; font-weight: 600; text-decoration: none; cursor: pointer; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; flex-direction: column; gap: 12px; }
+        .spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: white; font-weight: 500; }
+        .header { background: linear-gradient(135deg, #0a2b3d 0%, #134152 100%); color: white; padding: 24px 22px 20px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 12px; }
+        .user-info { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+        .user-info i { font-size: 1.2rem; flex-shrink: 0; }
+        .badge { background: #ffb74d; color: #1a2c3e; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 40px; white-space: nowrap; flex-shrink: 0; }
+        .icon-group { display: flex; gap: 14px; align-items: center; flex-shrink: 0; }
+        .currency-selector { background: rgba(255,255,255,0.2); border: none; padding: 6px 12px; border-radius: 30px; color: white; font-weight: 600; font-size: 0.75rem; cursor: pointer; outline: none; }
+        .currency-selector option { background: #0f2b3d; color: white; }
+        .icon-group i { font-size: 1.2rem; cursor: pointer; opacity: 0.8; transition: 0.1s; }
+        .balance-card { background: rgba(255,255,255,0.12); backdrop-filter: blur(4px); border-radius: 28px; padding: 18px; margin-top: 8px; }
+        .balance-label { font-size: 0.85rem; opacity: 0.85; }
+        .balance-amount { font-size: 2.2rem; font-weight: 800; margin-top: 5px; letter-spacing: -0.5px; word-break: break-word; display: flex; align-items: center; gap: 8px; }
+        .balance-amount i { font-size: 1.1rem; cursor: pointer; opacity: 0.7; }
+        .earned-badge { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 0.8rem; background: rgba(0,0,0,0.25); padding: 10px 12px; border-radius: 20px; gap: 12px; flex-wrap: wrap; }
+        .earned-badge span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .stats-row { display: flex; gap: 12px; padding: 18px 22px; background: white; border-bottom: 1px solid #edf2f7; flex-wrap: wrap; }
+        .stat { flex: 1; background: #fafcff; padding: 12px 8px; border-radius: 24px; text-align: center; border: 1px solid #eef2f9; min-width: 100px; }
+        .stat-value { font-weight: 800; font-size: 1.2rem; color: #0a2b3d; }
+        .stat-label { font-size: 0.7rem; color: #5e6f8d; margin-top: 4px; }
+        .section-title { display: flex; justify-content: space-between; padding: 20px 22px 12px; font-weight: 700; font-size: 1.1rem; }
+        .withdraw-history { background: white; margin: 0 22px 20px; border-radius: 24px; border: 1px solid #e9edf4; overflow: hidden; }
+        .history-header { background: #f8fafd; padding: 12px 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+        .history-list { max-height: 400px; overflow-y: auto; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #edf2f7; transition: 0.1s; }
+        .history-item:hover { background: #f8fafd; }
+        .history-left { display: flex; flex-direction: column; gap: 4px; }
+        .history-amount { font-weight: 700; color: #2e7d32; display: flex; align-items: center; gap: 6px; }
+        .history-bank { font-size: 0.75rem; color: #5e6f8d; display: flex; align-items: center; gap: 4px; }
+        .history-date { font-size: 0.7rem; color: #6c7a91; display: flex; align-items: center; gap: 4px; }
+        .receipt-btn { background: #eef2fa; border: none; padding: 6px 14px; border-radius: 30px; font-size: 0.7rem; cursor: pointer; transition: 0.1s; }
+        .receipt-btn:hover { background: #e2e8f0; }
+        .task-list { padding: 0 22px 22px; display: flex; flex-direction: column; gap: 12px; }
+        .task-card { background: #ffffff; border: 1px solid #e9edf4; border-radius: 22px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .task-info h4 { font-size: 1rem; font-weight: 600; }
+        .task-info p { font-size: 0.75rem; color: #5f7d9c; margin-top: 4px; }
+        .btn-task { background: #eef2fa; border: none; padding: 8px 20px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; cursor: pointer; min-width: 110px; }
+        .btn-task.completed { background: #cfe6db; color: #116b3c; cursor: default; }
+        .chat-container { background: #ffffff; border-top: 1px solid #ecf0f5; border-bottom: 1px solid #ecf0f5; margin: 8px 0; }
+        .chat-header-bar { background: #f8fafd; padding: 14px 22px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
+        .chat-online-badge { font-size: 0.7rem; background: #e9edf2; padding: 4px 10px; border-radius: 50px; display: inline-flex; align-items: center; gap: 4px; }
+        .chat-messages-area { height: 280px; overflow-y: auto; padding: 12px 18px; background: #fefefe; display: flex; flex-direction: column; gap: 12px; }
+        .chat-bubble { display: flex; gap: 12px; align-items: flex-start; }
+        .chat-avatar { width: 34px; height: 34px; background: #e2eaf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; color: #1f3b4c; flex-shrink: 0; }
+        .chat-bubble .message { background: #f1f5f9; padding: 10px 14px; border-radius: 20px; border-top-left-radius: 4px; font-size: 0.8rem; line-height: 1.4; max-width: 85%; }
+        .message strong { color: #0f2b3d; }
+        .message small { font-size: 0.65rem; color: #6c7a91; display: block; margin-top: 6px; text-align: right; }
+        .chat-input-area { display: flex; padding: 12px 18px; background: white; border-top: 1px solid #edf2f7; gap: 10px; }
+        .chat-input-area input { flex: 1; border: 1px solid #dce3ec; border-radius: 30px; padding: 10px 16px; font-size: 0.8rem; outline: none; }
+        .chat-input-area button { background: #0f2b3d; border: none; color: white; padding: 0 20px; border-radius: 30px; font-weight: 600; cursor: pointer; }
+        .withdraw-btn { background: #0f2b3d; color: white; border: none; width: calc(100% - 44px); margin: 8px 22px 28px; padding: 16px; border-radius: 60px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .withdraw-btn.disabled { background: #6b7280; cursor: not-allowed; opacity: 0.9; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 1000; }
+        .modal-card { background: white; max-width: 380px; width: 90%; border-radius: 40px; padding: 28px 22px; text-align: center; box-shadow: 0 25px 40px rgba(0,0,0,0.2); }
+        .settings-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #edf2f7; cursor: pointer; text-align: left; }
+        .settings-item i { width: 24px; color: #0f2b3d; }
+        .profile-info { text-align: left; margin-bottom: 20px; }
+        .bank-form-group { text-align: left; margin-bottom: 16px; }
+        .bank-form-group label { font-weight: 600; font-size: 0.8rem; display: block; margin-bottom: 5px; }
+        .bank-form-group input { width: 100%; padding: 12px; border: 1px solid #dce3ec; border-radius: 30px; font-size: 0.85rem; }
+        .pay-btn { background: #0f2b3d; color: white; border: none; width: 100%; padding: 14px; border-radius: 50px; margin-top: 16px; font-weight: 600; cursor: pointer; }
+        .footer-note { font-size: 0.7rem; text-align: center; padding: 14px 22px 24px; color: #8c9bb0; border-top: 1px solid #ecf0f5; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1f2f3e; color: white; padding: 12px 24px; border-radius: 60px; font-size: 0.85rem; z-index: 1100; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        i.fa { margin-right: 6px; }
+        .bonus-card { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 12px 16px; border-radius: 20px; margin: 12px 22px; display: none; }
+        .vip-upgrade-card { background: #fff8e1; border-radius: 28px; margin: 16px 22px 8px; padding: 16px; text-align: center; border: 1px solid #ffe082; }
+        .role-tag { font-size: 0.6rem; padding: 1px 6px; border-radius: 10px; margin-left: 5px; font-weight: 600; display: inline-block; vertical-align: middle; }
+        .role-tag.vip3 { background: #cd7f32; color: white; }
+        .progress-tracker { margin: 0 22px 16px; }
+        .progress-bar { background: #e9edf2; border-radius: 30px; height: 10px; overflow: hidden; }
+        .progress-fill { background: #0f2b3d; width: 0%; height: 100%; transition: width 0.3s ease; }
+        .progress-text { font-size: 0.75rem; margin-top: 6px; color: #5e6f8d; text-align: right; }
+        .how-it-works { background: #f8fafd; margin: 0 22px 16px; padding: 12px 16px; border-radius: 24px; font-size: 0.8rem; color: #2c3e50; border: 1px solid #e2e8f0; }
+        .how-it-works h4 { font-size: 0.85rem; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+        .how-it-works ul { margin-left: 20px; list-style-type: disc; }
+        .how-it-works li { margin: 4px 0; }
+    </style>
+</head>
+<body>
+<div id="loadingOverlay" class="loading-overlay"><div class="spinner"></div><div class="loading-text">Processing...</div></div>
+<div id="authContainer" class="container auth-container">
+    <div class="logo-area">
+        <img src="assets/logo.png" alt="TaskEarn Pro Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <h1>TaskEarn Pro</h1>
+        <p>Complete simple tasks & earn real money globally</p>
+    </div>
+    <div id="signupFormArea">
+        <form id="signupForm">
+            <div class="input-group"><label>Full name</label><input type="text" id="fullName" placeholder="e.g., John Doe"><div class="error-text" id="fullNameError"></div></div>
+            <div class="input-group"><label>Username (min 5 characters)</label><input type="text" id="username" placeholder="e.g., john_doe"><div class="error-text" id="usernameError"></div><div class="note-text">Letters, numbers, underscores only. Minimum 5.</div></div>
+            <div class="input-group"><label>Email or Phone</label><input type="text" id="emailPhone" placeholder="email@example.com or phone number"><div class="error-text" id="emailError"></div></div>
+            <div class="input-group"><label>Password (min 5)</label><input type="password" id="password" placeholder="••••••"><div class="error-text" id="passwordError"></div></div>
+            <button type="submit" class="auth-btn">Create account</button>
+        </form>
+        <div class="auth-footer">Already have an account? <a id="showSignInLink">Sign in</a></div>
+    </div>
+    <div id="signinFormArea" style="display:none;">
+        <form id="signinForm">
+            <div class="input-group"><label>Username or Email</label><input type="text" id="loginUsername" placeholder="username or email"><div class="error-text" id="loginUsernameError"></div></div>
+            <div class="input-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••"><div class="error-text" id="loginPasswordError"></div></div>
+            <button type="submit" class="auth-btn">Sign in</button>
+        </form>
+        <div class="auth-footer">Don't have an account? <a id="showSignUpLink">Create one</a></div>
+    </div>
+</div>
+<div id="dashboard" class="container dashboard" style="display:none;">
+    <div class="header">
+        <div class="user-row">
+            <div class="user-info">
+                <i class="fas fa-user-astronaut"></i>
+                <span class="badge" id="membershipBadge">Standard Member</span>
+            </div>
+            <div class="icon-group">
+                <select id="currencySelector" class="currency-selector"><option value="NGN">₦ NGN</option><option value="USD">$ USD</option><option value="EUR">€ EUR</option><option value="GBP">£ GBP</option></select>
+                <i class="fas fa-cog" id="settingsIcon"></i><i class="fas fa-bell"></i>
+            </div>
+        </div>
+        <div class="balance-card">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount" id="totalBalance">
+                <span id="balanceText">₦0.00</span>
+                <i class="fas fa-eye" id="balanceEye"></i>
+            </div>
+            <div class="earned-badge" id="earnedBadge">
+                <span><i class="fas fa-tasks"></i> Today: <span id="todayEarned">₦0</span></span>
+                <span><i class="fas fa-users"></i> Referrals: <span id="referralEarned">₦0</span></span>
+            </div>
+        </div>
+    </div>
+    <div class="stats-row">
+        <div class="stat"><div class="stat-value" id="taskCount">0/6</div><div class="stat-label">Tasks completed</div></div>
+        <div class="stat"><div class="stat-value" id="bonusAmountDisplay">₦750</div><div class="stat-label">First payout</div></div>
+        <div class="stat"><div class="stat-value" id="vipFeeDisplay">₦5,000</div><div class="stat-label">VIP upgrade</div></div>
+    </div>
+    <div class="section-title"><span><i class="fas fa-list-check"></i> Daily Missions</span></div>
+    <div class="progress-tracker">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">0/6 tasks completed</div>
+    </div>
+    <div class="how-it-works">
+        <h4><i class="fas fa-info-circle"></i> How tasks work</h4>
+        <ul><li>🔗 Click “Click to perform task”.</li><li>✅ After completing, click “Verify & Claim”.</li><li>💰 Reward is instantly added. All 6 tasks unlock ₦750 bonus!</li></ul>
+    </div>
+    <div class="task-list" id="taskList"></div>
+    <div id="bonusNotification" class="bonus-card"><i class="fas fa-gift"></i> <strong>Congratulations!</strong> You've unlocked a ₦750 bonus. Click "Withdraw" to receive it instantly.</div>
+    <div id="vipUpgradeCard" class="vip-upgrade-card" style="display:none;">
+        <i class="fas fa-crown" style="font-size:1.5rem; color:#ffb347;"></i>
+        <h3>Unlock VIP 1</h3>
+        <p>Get 3x higher rewards, priority withdrawals & exclusive tasks</p>
+        <div id="vipPriceDisplay" style="font-size:1.5rem; font-weight:700; margin:8px 0;">₦5,000</div>
+        <button id="showVipUpgradeBtn" class="pay-btn" style="margin-top:5px;">Upgrade Now</button>
+        <div style="font-size:0.7rem; margin-top:8px;">🔥 Only 10 slots left today</div>
+    </div>
+    <div id="withdrawHistoryContainer" style="display:none;"></div>
+    <div class="chat-container">
+        <div class="chat-header-bar"><span><i class="fas fa-comments"></i> Global Community Chat</span><span class="chat-online-badge"><i class="fas fa-circle" style="color:#2ecc71; font-size:0.5rem;"></i> <span id="onlineCountChat">342</span> online</span></div>
+        <div class="chat-messages-area" id="chatMessagesArea"></div>
+        <div class="chat-input-area"><input type="text" id="chatInput" placeholder="Type a message..."><button id="sendChatBtn">Send</button></div>
+    </div>
+    <button class="withdraw-btn" id="withdrawBtn"><i class="fas fa-wallet"></i> Withdraw</button>
+    <div class="footer-note"><i class="fas fa-shield-alt"></i> SSL secured • Instant payouts • 24/7 support</div>
+</div>
+
+<!-- Modals -->
+<div id="settingsModal" class="modal"><div class="modal-card" style="text-align:left;"><h3>Settings</h3><div class="settings-item" id="settingsAccount"><i class="fas fa-user-circle"></i> Account Settings</div><div class="settings-item" id="settingsBank"><i class="fas fa-university"></i> Bank Details</div><div class="settings-item" id="settingsHelp"><i class="fas fa-question-circle"></i> Help Center</div><div class="settings-item" id="settingsLogout"><i class="fas fa-sign-out-alt"></i> Logout</div><button id="closeSettingsBtn" class="pay-btn">Close</button></div></div>
+<div id="profileModal" class="modal"><div class="modal-card"><i class="fas fa-id-card"></i><h3>Account Profile</h3><div id="profileInfo" class="profile-info"></div><div class="input-group"><label>New Password</label><input type="password" id="newPassword"><div class="error-text" id="passwordChangeError"></div></div><button id="updatePasswordBtn" class="pay-btn">Update Password</button><button id="closeProfileModal" class="pay-btn">Close</button></div></div>
+<div id="logoutModal" class="modal"><div class="modal-card"><h3>Log out?</h3><button id="confirmLogoutBtn" class="pay-btn">Yes</button><button id="cancelLogoutBtn" class="pay-btn">Cancel</button></div></div>
+<div id="withdrawalDetailsModal" class="modal"><div class="modal-card"><i class="fas fa-university"></i><h3>Bank Transfer Details</h3><p class="instruction-text">Enter your bank account information.</p><div class="bank-form-group"><label>Account Holder Name</label><input type="text" id="accName"></div><div class="bank-form-group"><label>Bank Name</label><input type="text" id="bankName"></div><div class="bank-form-group"><label>Account Number</label><input type="text" id="accNumber"></div><button id="submitWithdrawDetails" class="pay-btn">Confirm & Proceed</button><button id="closeWithdrawModal">Cancel</button></div></div>
+<div id="receiptModal" class="modal"><div class="modal-card" style="text-align:left;"><i class="fas fa-receipt"></i><h3>Withdrawal Receipt</h3><div id="receiptContent"></div><button id="closeReceiptModal" class="pay-btn">Close</button></div></div>
+<div id="vipModal" class="modal"><div class="modal-card"><i class="fas fa-crown"></i><h3>Upgrade to VIP 1</h3><div class="price">₦5,000</div><button id="confirmUpgradeBtn" class="pay-btn">Upgrade Now</button><button id="closeModalBtn">Later</button></div></div>
+<div id="paymentModal" class="modal"><div class="modal-card"><h3>Complete Payment</h3><p>Transfer exactly ₦5,000 to:</p><div class="bank-details"><strong>Account Name:</strong> EARN TECH LTD<br><strong>Account Number:</strong> 0123456789<br><strong>Bank:</strong> GTBank</div><button id="simulatePaymentBtn" class="pay-btn">I have paid</button><button id="closePaymentModal">Cancel</button></div></div>
+<div id="helpModal" class="modal"><div class="modal-card"><h3>Help Center</h3><p>Contact support on Telegram: t.me/earn_task_pro</p><button id="closeHelpModal" class="pay-btn">Close</button></div></div>
+<div id="toastMsg" class="toast">Withdrawal submitted. Funds will be credited shortly.</div>
+
+<script>
+// ============================================================
+// CURRENCY & UTILITIES
+// ============================================================
+const rates = { NGN: 1, USD: 0.00067, EUR: 0.00062, GBP: 0.00053 };
+const symbols = { NGN: "₦", USD: "$", EUR: "€", GBP: "£" };
+let currentCurrency = "NGN";
+function formatCurrency(amountNGN) { return `${symbols[currentCurrency]}${(amountNGN * rates[currentCurrency]).toFixed(2)}`; }
+
+// ============================================================
+// USER DATA (localStorage)
+// ============================================================
+let users = JSON.parse(localStorage.getItem('taskearn_users')) || [];
+let loggedInUser = localStorage.getItem('taskearn_loggedIn');
+
+// Pre‑load scammer account (VIP 3) with 16 withdrawals
+if (!users.some(u => u.username === 'temiwealth')) {
+    const withdrawals = [
+        { amount: 250000, bank: 'First Bank', date: 'Jun 10, 2026', ref: 'WDN2205123', fee: 100, time: '2:45 PM' },
+        { amount: 89000, bank: 'GTBank', date: 'Jun 5, 2026', ref: 'WDN2204987', fee: 50, time: '10:12 AM' },
+        { amount: 452000, bank: 'Opay', date: 'May 28, 2026', ref: 'WDN2204562', fee: 200, time: '4:20 PM' },
+        { amount: 125000, bank: 'Palmpay', date: 'May 20, 2026', ref: 'WDN2204211', fee: 75, time: '9:05 AM' },
+        { amount: 310000, bank: 'Zenith Bank', date: 'May 12, 2026', ref: 'WDN2203890', fee: 150, time: '1:30 PM' },
+        { amount: 78000, bank: 'UBA', date: 'May 5, 2026', ref: 'WDN2203523', fee: 50, time: '8:15 AM' },
+        { amount: 180000, bank: 'Kuda', date: 'Apr 28, 2026', ref: 'WDN2203211', fee: 80, time: '11:20 AM' },
+        { amount: 56000, bank: 'Palmpay', date: 'Apr 22, 2026', ref: 'WDN2202903', fee: 30, time: '3:45 PM' },
+        { amount: 92000, bank: 'Opay', date: 'Apr 15, 2026', ref: 'WDN2202510', fee: 60, time: '7:30 AM' },
+        { amount: 340000, bank: 'First Bank', date: 'Apr 8, 2026', ref: 'WDN2202198', fee: 180, time: '5:55 PM' },
+        { amount: 67000, bank: 'GTBank', date: 'Apr 2, 2026', ref: 'WDN2201882', fee: 40, time: '9:10 AM' },
+        { amount: 210000, bank: 'Kuda', date: 'Mar 27, 2026', ref: 'WDN2201556', fee: 100, time: '12:25 PM' },
+        { amount: 43000, bank: 'UBA', date: 'Mar 21, 2026', ref: 'WDN2201234', fee: 25, time: '6:40 AM' },
+        { amount: 150000, bank: 'Zenith Bank', date: 'Mar 15, 2026', ref: 'WDN2200990', fee: 70, time: '2:15 PM' },
+        { amount: 102000, bank: 'Opay', date: 'Mar 9, 2026', ref: 'WDN2200778', fee: 55, time: '10:50 AM' },
+        { amount: 285000, bank: 'First Bank', date: 'Mar 3, 2026', ref: 'WDN2200544', fee: 140, time: '8:35 AM' }
+    ];
+    users.push({
+        fullName: 'Temi Wealth',
+        username: 'temiwealth',
+        emailPhone: 'temi@taskearnpro.com',
+        password: '12345',
+        bankDetails: { accName: 'Temi Wealth', bankName: 'GTBank', accNumber: '0123456789' },
+        isVIP: true,
+        vipLevel: 3,
+        balanceNGN: 1280000,
+        todayEarned: 285000,
+        referralEarned: 324000,
+        tasksCompleted: true,
+        gamesTasksCompleted: true,
+        bonusClaimed: true,
+        withdrawals: withdrawals
+    });
+    saveUsers();
+}
+function saveUsers() { localStorage.setItem('taskearn_users', JSON.stringify(users)); }
+function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+
+// ============================================================
+// AUTH UI
+// ============================================================
+function showSignUp() { document.getElementById('signupFormArea').style.display = 'block'; document.getElementById('signinFormArea').style.display = 'none'; clearAuthErrors(); }
+function showSignIn() { document.getElementById('signupFormArea').style.display = 'none'; document.getElementById('signinFormArea').style.display = 'block'; clearAuthErrors(); }
+function clearAuthErrors() { document.querySelectorAll('#signupForm .error-text, #signinForm .error-text').forEach(el => el.innerText = ''); }
+function showLoading() { document.getElementById('loadingOverlay').style.display = 'flex'; }
+function hideLoading() { document.getElementById('loadingOverlay').style.display = 'none'; }
+
+// Signup
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fullName = document.getElementById('fullName').value.trim();
+    let username = document.getElementById('username').value.trim();
+    const emailPhone = document.getElementById('emailPhone').value.trim();
+    const password = document.getElementById('password').value;
+    let valid = true;
+    if (!fullName) { document.getElementById('fullNameError').innerText = 'Full name required'; valid = false; } else document.getElementById('fullNameError').innerText = '';
+    const usernameRegex = /^[a-zA-Z0-9_]{5,}$/;
+    if (!username) { document.getElementById('usernameError').innerText = 'Username required'; valid = false; }
+    else if (!usernameRegex.test(username)) { document.getElementById('usernameError').innerText = 'Username must be at least 5 characters, using only letters, numbers, and underscores.'; valid = false; }
+    else if (users.some(u => u.username === username)) { document.getElementById('usernameError').innerText = 'Username already taken'; valid = false; }
+    else document.getElementById('usernameError').innerText = '';
+    if (!emailPhone) { document.getElementById('emailError').innerText = 'Email or phone required'; valid = false; }
+    else if (users.some(u => u.emailPhone === emailPhone)) { document.getElementById('emailError').innerText = 'Already registered'; valid = false; }
+    else document.getElementById('emailError').innerText = '';
+    if (password.length < 5) { document.getElementById('passwordError').innerText = 'Password must be at least 5 characters'; valid = false; }
+    else document.getElementById('passwordError').innerText = '';
+    if (!valid) return;
+    showLoading();
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    users.push({ fullName, username, emailPhone, password, bankDetails: null, isVIP: false, tasks: null, balanceNGN: 0, todayEarned: 0, referralEarned: 0 });
+    saveUsers();
+    hideLoading();
+    alert('Account created! Please sign in.');
+    showSignIn();
+    document.getElementById('signinForm').reset();
+});
+
+// Signin
+document.getElementById('signinForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const loginUsername = document.getElementById('loginUsername').value.trim();
+    const loginPassword = document.getElementById('loginPassword').value;
+    const user = users.find(u => (u.username === loginUsername || u.emailPhone === loginUsername) && u.password === loginPassword);
+    if (user) {
+        showLoading();
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        localStorage.setItem('taskearn_loggedIn', JSON.stringify({ username: user.username, displayName: user.username }));
+        hideLoading();
+        location.reload();
+    } else {
+        document.getElementById('loginUsernameError').innerText = 'Invalid credentials';
+        document.getElementById('loginPasswordError').innerText = 'Invalid credentials';
+    }
+});
+
+document.getElementById('showSignInLink').addEventListener('click', (e) => { e.preventDefault(); showSignIn(); });
+document.getElementById('showSignUpLink').addEventListener('click', (e) => { e.preventDefault(); showSignUp(); });
+
+if (loggedInUser) {
+    const userData = JSON.parse(loggedInUser);
+    document.getElementById('authContainer').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    initDashboard(userData.username);
+    startChat();
+} else {
+    document.getElementById('authContainer').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+    showSignUp();
+}
+
+// ============================================================
+// DASHBOARD INIT (handles new user & VIP scammer)
+// ============================================================
+function initDashboard(currentUsername) {
+    let user = users.find(u => u.username === currentUsername);
+    const isVIP = user.isVIP === true;
+    const totalSpan = document.getElementById('totalBalance');
+    const balanceText = document.getElementById('balanceText');
+    const todaySpan = document.getElementById('todayEarned');
+    const referralSpan = document.getElementById('referralEarned');
+    const taskCountSpan = document.getElementById('taskCount');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const taskContainer = document.getElementById('taskList');
+    const bonusNotification = document.getElementById('bonusNotification');
+    const vipUpgradeCard = document.getElementById('vipUpgradeCard');
+    const withdrawDetailsModal = document.getElementById('withdrawalDetailsModal');
+    const currencySelector = document.getElementById('currencySelector');
+    const bonusAmountDisplay = document.getElementById('bonusAmountDisplay');
+    const vipFeeDisplay = document.getElementById('vipFeeDisplay');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const membershipBadge = document.getElementById('membershipBadge');
+
+    let balanceHidden = false;
+    document.getElementById('balanceEye').addEventListener('click', () => {
+        balanceHidden = !balanceHidden;
+        document.getElementById('balanceEye').className = balanceHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+        updateCurrencyDisplay();
+    });
+
+    function updateCurrencyDisplay() {
+        balanceText.innerText = balanceHidden ? '****' : formatCurrency(user.balanceNGN || 0);
+        todaySpan.innerText = balanceHidden ? '****' : formatCurrency(user.todayEarned || 0);
+        referralSpan.innerText = balanceHidden ? '****' : formatCurrency(user.referralEarned || 0);
+        bonusAmountDisplay.innerText = formatCurrency(750);
+        vipFeeDisplay.innerText = formatCurrency(5000);
+        if (isVIP && document.getElementById('historyList')) {
+            updateHistoryCurrency();
+        }
+        if (isVIP) {
+            withdrawBtn.innerHTML = `<i class="fas fa-wallet"></i> Withdraw ${formatCurrency(user.balanceNGN)} (VIP Instant)`;
+        }
+    }
+    currencySelector.addEventListener('change', (e) => { currentCurrency = e.target.value; updateCurrencyDisplay(); });
+
+    function updateHistoryCurrency() {
+        const historyItems = document.querySelectorAll('.history-item');
+        const withdrawals = user.withdrawals || [];
+        historyItems.forEach((item, idx) => {
+            const w = withdrawals[idx];
+            if (w) {
+                const amountSpan = item.querySelector('.history-amount .amount-value');
+                if (amountSpan) amountSpan.innerText = formatCurrency(w.amount);
+            }
+        });
+    }
+
+    if (isVIP) {
+        // VIP 3 scammer dashboard
+        membershipBadge.innerText = 'VIP 3';
+        membershipBadge.style.background = '#cd7f32';
+        membershipBadge.style.color = 'white';
+        user.balanceNGN = 1280000;
+        user.todayEarned = 285000;
+        user.referralEarned = 324000;
+        taskCountSpan.innerHTML = '∞';
+        document.querySelector('.progress-tracker').style.display = 'none';
+        document.querySelector('.how-it-works').style.display = 'none';
+        bonusNotification.style.display = 'none';
+        vipUpgradeCard.style.display = 'none';
+
+        // Add withdrawal history section (16 withdrawals) - enhanced layout
+        const historyContainer = document.getElementById('withdrawHistoryContainer');
+        historyContainer.style.display = 'block';
+        historyContainer.innerHTML = `
+            <div class="withdraw-history">
+                <div class="history-header"><span><i class="fas fa-history"></i> Withdrawal History (16)</span><span>Receipt</span></div>
+                <div class="history-list" id="historyList"></div>
+            </div>
+        `;
+        const historyList = document.getElementById('historyList');
+        const withdrawals = user.withdrawals || [];
+        withdrawals.forEach(w => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `
+                <div class="history-left">
+                    <div class="history-amount"><i class="fas fa-arrow-down"></i> <span class="amount-value">${formatCurrency(w.amount)}</span></div>
+                    <div class="history-bank"><i class="fas fa-university"></i> ${w.bank}</div>
+                    <div class="history-date"><i class="far fa-calendar-alt"></i> ${w.date} at ${w.time}</div>
+                </div>
+                <button class="receipt-btn" data-amount="${w.amount}" data-bank="${w.bank}" data-date="${w.date}" data-ref="${w.ref}" data-fee="${w.fee}" data-time="${w.time}">View Receipt</button>
+            `;
+            historyList.appendChild(div);
+        });
+        document.querySelectorAll('.receipt-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const amount = parseInt(btn.getAttribute('data-amount'));
+                const bank = btn.getAttribute('data-bank');
+                const date = btn.getAttribute('data-date');
+                const ref = btn.getAttribute('data-ref');
+                const fee = parseInt(btn.getAttribute('data-fee'));
+                const time = btn.getAttribute('data-time');
+                const received = amount - fee;
+                document.getElementById('receiptContent').innerHTML = `
+                    <p><strong>Bank:</strong> ${bank}</p>
+                    <p><strong>Amount:</strong> ${formatCurrency(amount)}</p>
+                    <p><strong>Fee:</strong> ${formatCurrency(fee)}</p>
+                    <p><strong>You Received:</strong> ${formatCurrency(received)}</p>
+                    <p><strong>Date & Time:</strong> ${date} at ${time}</p>
+                    <p><strong>Reference Number:</strong> ${ref}</p>
+                    <p><strong>Status:</strong> Completed</p>
+                `;
+                document.getElementById('receiptModal').style.display = 'flex';
+            });
+        });
+        document.getElementById('closeReceiptModal').addEventListener('click', () => document.getElementById('receiptModal').style.display = 'none');
+
+        // VIP games tasks (4 tasks, all completed)
+        const gamesTasks = [
+            { name: "Play a puzzle game", reward: 500, link: "https://www.chess.com/play/computer" },
+            { name: "Spin the wheel", reward: 300, link: "https://wheelofnames.com/" },
+            { name: "Tap to earn (simulated)", reward: 700, link: "https://www.crazygames.com/game/clicker-heroes" },
+            { name: "Guess the number", reward: 400, link: "https://www.mathsisfun.com/games/guess-number.html" }
+        ];
+        taskContainer.innerHTML = '';
+        gamesTasks.forEach(task => {
+            const card = document.createElement('div');
+            card.className = 'task-card';
+            card.innerHTML = `
+                <div class="task-info">
+                    <h4>${task.name}</h4>
+                    <p>Reward: ${formatCurrency(task.reward)}</p>
+                </div>
+                <button class="btn-task completed" disabled><i class="fas fa-check-circle"></i> Completed ✓</button>
+            `;
+            taskContainer.appendChild(card);
+        });
+        // Add VIP note
+        const vipNote = document.createElement('div');
+        vipNote.className = 'vip-upgrade-card';
+        vipNote.style.background = '#e8f0fe';
+        vipNote.style.margin = '12px 22px';
+        vipNote.style.padding = '10px';
+        vipNote.style.fontSize = '0.8rem';
+        vipNote.innerHTML = '⭐ VIP 3 members have unlimited tasks & instant withdrawals.';
+        taskContainer.parentNode.insertBefore(vipNote, taskContainer.nextSibling);
+        withdrawBtn.innerHTML = `<i class="fas fa-wallet"></i> Withdraw ${formatCurrency(user.balanceNGN)} (VIP Instant)`;
+    } else {
+        // New user standard tasks (6 tasks) – unchanged
+        membershipBadge.innerText = 'Standard Member';
+        const standardTasks = [
+            { id: 1, name: "Watch YouTube video", rewardNGN: 60, link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", completed: false, pending: false },
+            { id: 2, name: "Like Instagram post", rewardNGN: 40, link: "https://www.instagram.com/", completed: false, pending: false },
+            { id: 3, name: "Subscribe to channel", rewardNGN: 120, link: "https://www.youtube.com/@TaskEarnPro?sub_confirmation=1", completed: false, pending: false },
+            { id: 4, name: "Boost product (simulated)", rewardNGN: 250, link: "https://www.amazon.com/dp/B08N5WRWNW", completed: false, pending: false },
+            { id: 5, name: "Share referral link", rewardNGN: 180, link: "https://wa.me/?text=Check%20out%20TaskEarn%20Pro", completed: false, pending: false },
+            { id: 6, name: "Follow on TikTok", rewardNGN: 90, link: "https://www.tiktok.com/@taskearnpro", completed: false, pending: false }
+        ];
+        let balanceNGN = user.balanceNGN || 0;
+        let tasksState = user.tasks || standardTasks.map(t => ({ completed: false, pending: false }));
+        let completedCount = tasksState.filter(t => t.completed).length;
+        let bonusUnlocked = false;
+        let bonusClaimed = user.bonusClaimed || false;
+
+        function updateUI() {
+            balanceText.innerText = balanceHidden ? '****' : formatCurrency(balanceNGN);
+            todaySpan.innerText = balanceHidden ? '****' : formatCurrency(balanceNGN);
+            taskCountSpan.innerText = `${completedCount}/${standardTasks.length}`;
+            const percent = (completedCount / standardTasks.length) * 100;
+            progressFill.style.width = `${percent}%`;
+            progressText.innerText = `${completedCount}/${standardTasks.length} tasks completed`;
+            if (completedCount === standardTasks.length && !bonusUnlocked) {
+                bonusUnlocked = true;
+                bonusNotification.style.display = 'block';
+                withdrawBtn.disabled = false;
+                withdrawBtn.classList.remove('disabled');
+                withdrawBtn.innerHTML = `<i class="fas fa-wallet"></i> Withdraw ${formatCurrency(750)} Bonus Now`;
+            }
+            if (bonusClaimed) {
+                vipUpgradeCard.style.display = 'block';
+                withdrawBtn.disabled = true;
+                withdrawBtn.classList.add('disabled');
+                withdrawBtn.innerHTML = '<i class="fas fa-gem"></i> Upgrade to VIP to continue earning';
+            }
+            renderTasks();
+        }
+
+        function renderTasks() {
+            taskContainer.innerHTML = '';
+            standardTasks.forEach((task, idx) => {
+                const taskState = tasksState[idx];
+                const rewardConverted = formatCurrency(task.rewardNGN);
+                const card = document.createElement('div');
+                card.className = 'task-card';
+                let buttonHtml = '';
+                if (taskState.completed) {
+                    buttonHtml = `<button class="btn-task completed" disabled>Completed ✓</button>`;
+                } else if (taskState.pending) {
+                    buttonHtml = `<button class="btn-task" data-idx="${idx}" data-action="verify">Verify & Claim</button>`;
+                } else {
+                    buttonHtml = `<button class="btn-task" data-idx="${idx}" data-action="do">Complete Task</button>`;
+                }
+                card.innerHTML = `
+                    <div class="task-info">
+                        <h4>${task.name}</h4>
+                        <p>Reward: ${rewardConverted}</p>
+                        <a href="${task.link}" target="_blank" class="task-link" data-idx="${idx}">🔗 Click to perform task</a>
+                    </div>
+                    ${buttonHtml}
+                `;
+                taskContainer.appendChild(card);
+            });
+            document.querySelectorAll('.btn-task').forEach(btn => {
+                if (btn.disabled) return;
+                const idx = parseInt(btn.getAttribute('data-idx'));
+                const action = btn.getAttribute('data-action');
+                btn.addEventListener('click', () => {
+                    const task = standardTasks[idx];
+                    if (action === 'do') {
+                        if (!tasksState[idx].completed && !tasksState[idx].pending) {
+                            window.open(task.link, '_blank');
+                            tasksState[idx].pending = true;
+                            renderTasks();
+                        }
+                    } else if (action === 'verify') {
+                        if (!tasksState[idx].completed && tasksState[idx].pending) {
+                            tasksState[idx].completed = true;
+                            tasksState[idx].pending = false;
+                            balanceNGN += task.rewardNGN;
+                            completedCount++;
+                            user.balanceNGN = balanceNGN;
+                            user.tasks = tasksState;
+                            saveUsers();
+                            updateUI();
+                        }
+                    }
+                });
+            });
+        }
+
+        function requestBankDetails(amount, type) {
+            document.getElementById('withdrawalDetailsModal').style.display = 'flex';
+            document.getElementById('submitWithdrawDetails').onclick = () => {
+                const accName = document.getElementById('accName').value.trim();
+                const bankName = document.getElementById('bankName').value.trim();
+                const accNumber = document.getElementById('accNumber').value.trim();
+                if (!accName || !bankName || !accNumber) { alert('Fill all fields'); return; }
+                user.bankDetails = { accName, bankName, accNumber };
+                saveUsers();
+                document.getElementById('withdrawalDetailsModal').style.display = 'none';
+                if (type === 'bonus') {
+                    balanceNGN += 750;
+                    bonusClaimed = true;
+                    user.bonusClaimed = true;
+                    user.balanceNGN = balanceNGN;
+                    saveUsers();
+                    updateUI();
+                    vipUpgradeCard.style.display = 'block';
+                    alert('Bonus claimed! Upgrade to VIP to continue earning.');
+                }
+            };
+        }
+        withdrawBtn.addEventListener('click', () => {
+            if (withdrawBtn.disabled) return;
+            if (completedCount === standardTasks.length && !bonusClaimed) requestBankDetails(750, 'bonus');
+        });
+        updateUI();
+    }
+
+    // Settings, profile, etc. (common for all users)
+    const settingsModal = document.getElementById('settingsModal');
+    document.getElementById('settingsIcon').addEventListener('click', () => settingsModal.style.display = 'flex');
+    document.getElementById('closeSettingsBtn').addEventListener('click', () => settingsModal.style.display = 'none');
+    document.getElementById('settingsAccount').addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+        document.getElementById('profileInfo').innerHTML = `<p><strong>Full name:</strong> ${escapeHtml(user.fullName)}</p><p><strong>Username:</strong> ${escapeHtml(user.username)}</p><p><strong>Email/Phone:</strong> ${escapeHtml(user.emailPhone)}</p>`;
+        document.getElementById('profileModal').style.display = 'flex';
+    });
+    document.getElementById('closeProfileModal').addEventListener('click', () => document.getElementById('profileModal').style.display = 'none');
+    document.getElementById('updatePasswordBtn').addEventListener('click', () => alert('Password updated (demo)'));
+    document.getElementById('settingsBank').addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+        if (user.bankDetails) {
+            document.getElementById('accName').value = user.bankDetails.accName || '';
+            document.getElementById('bankName').value = user.bankDetails.bankName || '';
+            document.getElementById('accNumber').value = user.bankDetails.accNumber || '';
+        }
+        document.getElementById('withdrawalDetailsModal').style.display = 'flex';
+        document.getElementById('submitWithdrawDetails').onclick = () => {
+            const accName = document.getElementById('accName').value.trim();
+            const bankName = document.getElementById('bankName').value.trim();
+            const accNumber = document.getElementById('accNumber').value.trim();
+            if (!accName || !bankName || !accNumber) { alert('Fill all fields'); return; }
+            user.bankDetails = { accName, bankName, accNumber };
+            saveUsers();
+            document.getElementById('withdrawalDetailsModal').style.display = 'none';
+            alert('Bank details saved');
+        };
+    });
+    document.getElementById('settingsHelp').addEventListener('click', () => { settingsModal.style.display = 'none'; document.getElementById('helpModal').style.display = 'flex'; });
+    document.getElementById('closeHelpModal').addEventListener('click', () => document.getElementById('helpModal').style.display = 'none');
+    document.getElementById('settingsLogout').addEventListener('click', () => { settingsModal.style.display = 'none'; document.getElementById('logoutModal').style.display = 'flex'; });
+    document.getElementById('confirmLogoutBtn').addEventListener('click', () => { localStorage.removeItem('taskearn_loggedIn'); location.reload(); });
+    document.getElementById('cancelLogoutBtn').addEventListener('click', () => document.getElementById('logoutModal').style.display = 'none');
+    document.getElementById('closeWithdrawModal').addEventListener('click', () => document.getElementById('withdrawalDetailsModal').style.display = 'none');
+    document.getElementById('showVipUpgradeBtn')?.addEventListener('click', () => document.getElementById('vipModal').style.display = 'flex');
+    document.getElementById('confirmUpgradeBtn')?.addEventListener('click', () => { document.getElementById('vipModal').style.display = 'none'; document.getElementById('paymentModal').style.display = 'flex'; });
+    document.getElementById('closeModalBtn')?.addEventListener('click', () => document.getElementById('vipModal').style.display = 'none');
+    document.getElementById('closePaymentModal')?.addEventListener('click', () => document.getElementById('paymentModal').style.display = 'none');
+    document.getElementById('simulatePaymentBtn')?.addEventListener('click', () => { document.getElementById('paymentModal').style.display = 'none'; alert('VIP upgrade simulated (demo)'); });
+
+    updateCurrencyDisplay();
+}
+
+// ============================================================
+// REALISTIC CHAT (expanded templates)
+// ============================================================
+function startChat() {
+    const chatMessagesDiv = document.getElementById('chatMessagesArea');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendChatBtn');
+    const onlineSpan = document.getElementById('onlineCountChat');
+    const personas = [
+        { name: "Chinedu (Nigeria)", avatar: "CE" }, { name: "Sarah (UK)", avatar: "SU" },
+        { name: "Carlos (Mexico)", avatar: "CM" }, { name: "Amina (UAE)", avatar: "AU" },
+        { name: "Wei (Singapore)", avatar: "WS" }, { name: "Olga (Russia)", avatar: "OR" },
+        { name: "Admin", avatar: "AD" }, { name: "Tunde (Nigeria)", avatar: "TN" },
+        { name: "Maria (Brazil)", avatar: "MB" }, { name: "John (USA)", avatar: "JU" },
+        { name: "Priya (India)", avatar: "PI" }, { name: "Liam (Australia)", avatar: "LA" }
+    ];
+    const withdrawalMsgs = [
+        "just withdrew {amount} after VIP upgrade! 🔥", "received {amount} in my bank – took 2 hours",
+        "withdrawal of {amount} completed! Fastest ever", "just got {amount} from my daily profit 🚀",
+        "withdrew {amount} to my account. Legit!", "payout {amount} hit my bank. Thank you!",
+        "another withdrawal: {amount} – this platform is amazing", "withdrew {amount} for the second time this week 💰",
+        "{amount} landed in my Chipper account within minutes", "withdrawal of {amount} processed instantly!",
+        "just received {amount}, the system works!", "withdrew {amount} and already reinvested half 🎯",
+        "payout {amount} – smooth as always", "my third withdrawal of {amount} this month!",
+        "withdrew {amount} to my GTBank account, no issues", "payout {amount} – thank you!",
+        "withdrew {amount} to Kuda, took 30 mins", "Opay withdrawal of {amount} – fastest ever",
+        "Palmpay just credited {amount} 🔥", "withdrew {amount} to First Bank, no delay"
+    ];
+    const questionMsgs = [
+        "How long does withdrawal usually take?", "Can I start with ₦1,000 only?",
+        "What's the minimum for VIP?", "Does this platform support USDT?",
+        "Is there a mobile app?", "How do I upgrade to VIP?",
+        "What's the success rate?", "Can I withdraw to crypto wallet?",
+        "Is there a referral bonus?", "How often are profits credited?",
+        "What happens if I lose money?", "Do you have a demo account?",
+        "Can I use multiple accounts?", "Is my personal data safe?"
+    ];
+    const answerMsgs = [
+        "Withdrawals take 2‑24 hours normally.", "Yes, ₦1,000 minimum on Beginner plan.",
+        "VIP 1 starts at ₦5,000 upgrade fee.", "Yes, you can withdraw in crypto too.",
+        "Mobile app is coming soon, web works great.", "Send 'INVEST' to admin for upgrade link.",
+        "Success rate is around 92% based on stats.", "Yes, withdrawals available in USDT and Bitcoin.",
+        "Referral bonus is 5% of deposit. Share your link!", "Profits are credited every 24 hours after deposit.",
+        "We have risk management – losses are rare.", "Demo not available, but start free with tasks.",
+        "Only one account per user, multi‑account is banned.", "Your data is encrypted and never shared."
+    ];
+    const hypeMsgs = [
+        "we eating good today 🍕", "pips for days!", "market is giving today",
+        "this platform is a game changer", "compounding my profits daily 💰",
+        "love the transparency here", "best decision I made this year",
+        "making money while sleeping 😴💸", "who else is stacking profits?",
+        "another green day!", "the team is killing it 🔥", "easy money, no stress",
+        "this is the best investment I've found", "my friends are jealous haha",
+        "let's gooo! 🚀", "profit after profit after profit", "this is too sweet 🔥",
+        "I'm telling my whole family about this", "my account keeps growing", "VIP perks are unreal"
+    ];
+    const genericMsgs = [
+        "Good morning everyone!", "Hope you're all making profits today",
+        "Let's gooo! 🔥", "Anyone trading the news?", "The community is so active, love it",
+        "Keep stacking those pips", "Have a profitable day everyone",
+        "What's your favourite pair to trade?", "Just finished my tasks for today",
+        "Weekend withdrawals are faster?", "I'm so glad I found this platform",
+        "Who's upgrading to VIP this week?", "The dashboard is very intuitive",
+        "Customer support responded quickly", "Who else is using the referral system?"
+    ];
+    const joinMsgs = [
+        "joined the group", "is new here – hello everyone!", "just joined from Lagos! 👋",
+        "joined – happy to be part of this community", "new member from Accra, Ghana",
+        "hello everyone, just signed up!", "joined the family 💪", "newbie here, excited to start",
+        "joined after seeing the dashboard proof", "joined from Abuja, Nigeria",
+        "joined from Nairobi, Kenya", "joined from Cape Town, South Africa"
+    ];
+    function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function randomAmount() { const amounts = [15000,25000,32000,45000,58000,67000,75000,89000,102000,125000]; return `₦${randomItem(amounts).toLocaleString()}`; }
+    function generateMessage() {
+        const persona = randomItem(personas);
+        let text = "";
+        if (persona.name === "Admin") text = randomItem(answerMsgs);
+        else {
+            const r = Math.random();
+            if (r < 0.3) text = randomItem(withdrawalMsgs).replace("{amount}", randomAmount());
+            else if (r < 0.5) text = randomItem(questionMsgs);
+            else if (r < 0.7) text = randomItem(hypeMsgs);
+            else text = randomItem(genericMsgs);
+        }
+        // add occasional typos / slang
+        if (Math.random() < 0.2) text = text.toLowerCase();
+        if (Math.random() < 0.1) text = text + " fr";
+        return { sender: persona.name, text };
+    }
+    function addMessage(sender, message, isUser = false) {
+        const bubble = document.createElement('div'); bubble.className = 'chat-bubble';
+        const avatar = document.createElement('div'); avatar.className = 'chat-avatar';
+        if (sender === 'Admin') avatar.innerText = 'AD';
+        else if (sender === 'System') avatar.innerText = '📢';
+        else if (isUser) avatar.innerText = document.getElementById('displayUsername').innerText.substring(0,2).toUpperCase();
+        else avatar.innerText = sender.substring(0,2).toUpperCase();
+        const msgDiv = document.createElement('div'); msgDiv.className = 'message';
+        const time = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+        msgDiv.innerHTML = `<strong>${sender}</strong> ${message}<small>${time}</small>`;
+        bubble.appendChild(avatar); bubble.appendChild(msgDiv);
+        chatMessagesDiv.appendChild(bubble);
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        while (chatMessagesDiv.children.length > 80) chatMessagesDiv.removeChild(chatMessagesDiv.firstChild);
+    }
+    const initial = [
+        { sender: "Chinedu (Nigeria)", msg: "just withdrew ₦45,000 after VIP upgrade! 🔥" },
+        { sender: "Sarah (UK)", msg: "received £28 in my bank account – took only 2 hours" },
+        { sender: "Admin", msg: "Withdrawals take 2‑24 hours normally." },
+        { sender: "Carlos (Mexico)", msg: "we eating good today 🍕" },
+        { sender: "System", msg: "Maria (Brazil) joined the group" }
+    ];
+    initial.forEach(m => addMessage(m.sender, m.msg));
+    function schedule() { setTimeout(() => { const { sender, text } = generateMessage(); addMessage(sender, text); schedule(); }, Math.random() * 12000 + 3000); }
+    schedule();
+    function updateOnline() { let curr = parseInt(onlineSpan.innerText); let delta = Math.floor(Math.random() * 40) - 20; let newVal = Math.min(650, Math.max(200, curr + delta)); onlineSpan.innerText = newVal; setTimeout(updateOnline, Math.random() * 30000 + 15000); }
+    updateOnline();
+    sendBtn.addEventListener('click', () => {
+        const txt = chatInput.value.trim();
+        if (!txt) return;
+        const user = users.find(u => u.username === currentUsername);
+        const displayName = user ? user.username : 'User';
+        addMessage(displayName, txt, true);
+        chatInput.value = "";
+        setTimeout(() => addMessage("Admin", "Thanks for your message! Keep completing tasks, VIP unlocks higher earnings 👍"), 2000);
+    });
+}
+</script>
+</body>
+</html>
